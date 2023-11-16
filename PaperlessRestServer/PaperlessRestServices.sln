@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34031.279
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaperlessRestServer", "NPaperless.Services\PaperlessRestServer.csproj", "{0EAB0323-3EE6-4969-A413-63700672C2C9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Paperless.BL", "Paperless.BL", "{30E65C3D-8D8D-482D-84E7-3D6B0AE37E8E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLogic.Entities", "BusinessLogic.Entities\BusinessLogic.Entities.csproj", "{05A55AC9-AF45-42C4-A26A-5633AF801B93}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLogic.Interfaces", "BusinessLogic.Interfaces\BusinessLogic.Interfaces.csproj", "{503DDF9C-1EA2-4A5C-B80E-7F67FECEF318}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLogic.Tests", "BusinessLogic.Tests\BusinessLogic.Tests.csproj", "{4295EDB6-B5A4-410E-A2A2-A73A8B6DA5BF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLogic", "BusinessLogic\BusinessLogic.csproj", "{9856909A-6EB7-4CAE-9F03-B1EC667D4953}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0EAB0323-3EE6-4969-A413-63700672C2C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EAB0323-3EE6-4969-A413-63700672C2C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EAB0323-3EE6-4969-A413-63700672C2C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EAB0323-3EE6-4969-A413-63700672C2C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05A55AC9-AF45-42C4-A26A-5633AF801B93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05A55AC9-AF45-42C4-A26A-5633AF801B93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05A55AC9-AF45-42C4-A26A-5633AF801B93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05A55AC9-AF45-42C4-A26A-5633AF801B93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{503DDF9C-1EA2-4A5C-B80E-7F67FECEF318}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{503DDF9C-1EA2-4A5C-B80E-7F67FECEF318}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{503DDF9C-1EA2-4A5C-B80E-7F67FECEF318}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{503DDF9C-1EA2-4A5C-B80E-7F67FECEF318}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4295EDB6-B5A4-410E-A2A2-A73A8B6DA5BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4295EDB6-B5A4-410E-A2A2-A73A8B6DA5BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4295EDB6-B5A4-410E-A2A2-A73A8B6DA5BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4295EDB6-B5A4-410E-A2A2-A73A8B6DA5BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9856909A-6EB7-4CAE-9F03-B1EC667D4953}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9856909A-6EB7-4CAE-9F03-B1EC667D4953}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9856909A-6EB7-4CAE-9F03-B1EC667D4953}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9856909A-6EB7-4CAE-9F03-B1EC667D4953}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{05A55AC9-AF45-42C4-A26A-5633AF801B93} = {30E65C3D-8D8D-482D-84E7-3D6B0AE37E8E}
+		{503DDF9C-1EA2-4A5C-B80E-7F67FECEF318} = {30E65C3D-8D8D-482D-84E7-3D6B0AE37E8E}
+		{4295EDB6-B5A4-410E-A2A2-A73A8B6DA5BF} = {30E65C3D-8D8D-482D-84E7-3D6B0AE37E8E}
+		{9856909A-6EB7-4CAE-9F03-B1EC667D4953} = {30E65C3D-8D8D-482D-84E7-3D6B0AE37E8E}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E3B0709A-8E73-4E90-BEE2-44D0CF60F3B3}
+	EndGlobalSection
+EndGlobal
