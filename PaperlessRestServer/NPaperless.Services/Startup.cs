@@ -25,6 +25,10 @@ using NPaperless.Services.Filters;
 using NPaperless.Services.OpenApi;
 using NPaperless.Services.Formatters;
 using NPaperless.Services.MappingProfile;
+using BusinessLogic.DataAccessMappingProfile;
+using Microsoft.EntityFrameworkCore;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
+using DataAccess.Sql;
 
 namespace NPaperless.Services
 {
@@ -54,8 +58,13 @@ namespace NPaperless.Services
         public void ConfigureServices(IServiceCollection services)
         {
 
-            // Add framework services.
-            services
+            services.AddDbContext<AppDbContext>(options =>
+       options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+        
+
+
+        // Add framework services.
+        services
                 // Don't need the full MVC stack for an API, see https://andrewlock.net/comparing-startup-between-the-asp-net-core-3-templates/
                 .AddControllers(options => {
                     options.InputFormatters.Insert(0, new InputFormatterStream());
@@ -101,7 +110,8 @@ namespace NPaperless.Services
                 services
                     .AddSwaggerGenNewtonsoftSupport();
 
-            services.AddAutoMapper(typeof(ServiceMappingProfile));
+            services.AddAutoMapper(typeof(ServiceMappingProfile),typeof(DataAccessMappingProfile));
+            
 
             services.AddCors(options =>
             {
@@ -119,7 +129,7 @@ namespace NPaperless.Services
         /// </summary>
         /// <param name="app"></param>
         /// <param name="env"></param>
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AppDbContext dbContext)
         {
             if (env.IsDevelopment())
             {
@@ -153,6 +163,11 @@ namespace NPaperless.Services
                 {
                     endpoints.MapControllers();
                 });
+
+            dbContext.Database.EnsureCreated();
+
+
+
         }
     }
 }
