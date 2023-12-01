@@ -20,6 +20,7 @@ using Newtonsoft.Json;
 using NPaperless.Services.Attributes;
 using NPaperless.Services.DTOs;
 using AutoMapper;
+using BusinessLogic.Interfaces;
 
 namespace NPaperless.Services.Controllers
 {
@@ -31,10 +32,12 @@ namespace NPaperless.Services.Controllers
     {
 
         private readonly IMapper _mapper;
+        private readonly ICorrespondentLogic _correspondentLogic;
 
-        public CorrespondentsApiController(IMapper mapper)
+        public CorrespondentsApiController(IMapper mapper, ICorrespondentLogic correspondentLogic)
         {
             _mapper = mapper;
+            _correspondentLogic = correspondentLogic;
         }
 
 
@@ -55,14 +58,13 @@ namespace NPaperless.Services.Controllers
         {
 
 
-            var correspondentEntity = _mapper.Map<Correspondent>(createCorrespondentRequest);
+            var correspondentEntity = _mapper.Map<BusinessLogic.Entities.Correspondent>(createCorrespondentRequest);
+            _correspondentLogic.CreateCorrespondent(correspondentEntity);
+         
 
-            string exampleJson = null;
-            exampleJson = "{\n  \"owner\" : 6,\n  \"matching_algorithm\" : 0,\n  \"is_insensitive\" : true,\n  \"name\" : \"name\",\n  \"match\" : \"match\"\n}";
 
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<CreateCorrespondentRequest>(exampleJson)
-            : default(CreateCorrespondentRequest);
+           
+          
            
 
             // to check if mapping works  
@@ -82,10 +84,9 @@ namespace NPaperless.Services.Controllers
         public virtual IActionResult DeleteCorrespondent([FromRoute(Name = "id")][Required] int id)
         {
 
-            //TODO: Uncomment the next line to return response 204 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(204);
+            _correspondentLogic.DeleteCorrespondent(id);
 
-            throw new NotImplementedException();
+            return Ok();
         }
 
         /// <summary>
@@ -101,17 +102,9 @@ namespace NPaperless.Services.Controllers
         [SwaggerResponse(statusCode: 200, type: typeof(GetCorrespondents200Response), description: "Success")]
         public virtual IActionResult GetCorrespondents([FromQuery(Name = "page")] int? page, [FromQuery(Name = "full_perms")] bool? fullPerms)
         {
+            //var example = _correspondentLogic.GetCorrespondent(id);
 
-            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(200, default(GetCorrespondents200Response));
-            string exampleJson = null;
-            exampleJson = "{\n  \"next\" : 6,\n  \"all\" : [ 5, 5 ],\n  \"previous\" : 1,\n  \"count\" : 0,\n  \"results\" : [ {\n    \"owner\" : 9,\n    \"matching_algorithm\" : 2,\n    \"document_count\" : 7,\n    \"is_insensitive\" : true,\n    \"permissions\" : {\n      \"view\" : {\n        \"groups\" : [ \"\", \"\" ],\n        \"users\" : [ \"\", \"\" ]\n      },\n      \"change\" : {\n        \"groups\" : [ \"\", \"\" ],\n        \"users\" : [ \"\", \"\" ]\n      }\n    },\n    \"name\" : \"name\",\n    \"match\" : \"match\",\n    \"id\" : 5,\n    \"last_correspondence\" : \"last_correspondence\",\n    \"slug\" : \"slug\"\n  }, {\n    \"owner\" : 9,\n    \"matching_algorithm\" : 2,\n    \"document_count\" : 7,\n    \"is_insensitive\" : true,\n    \"permissions\" : {\n      \"view\" : {\n        \"groups\" : [ \"\", \"\" ],\n        \"users\" : [ \"\", \"\" ]\n      },\n      \"change\" : {\n        \"groups\" : [ \"\", \"\" ],\n        \"users\" : [ \"\", \"\" ]\n      }\n    },\n    \"name\" : \"name\",\n    \"match\" : \"match\",\n    \"id\" : 5,\n    \"last_correspondence\" : \"last_correspondence\",\n    \"slug\" : \"slug\"\n  } ]\n}";
-
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<GetCorrespondents200Response>(exampleJson)
-            : default(GetCorrespondents200Response);
-            //TODO: Change the data returned
-            return new ObjectResult(example);
+            return Ok(); 
         }
 
         /// <summary>
@@ -126,18 +119,13 @@ namespace NPaperless.Services.Controllers
         [ValidateModelState]
         [SwaggerOperation("UpdateCorrespondent")]
         [SwaggerResponse(statusCode: 200, type: typeof(UpdateCorrespondent200Response), description: "Success")]
-        public virtual IActionResult UpdateCorrespondent([FromRoute(Name = "id")][Required] int id, [FromBody] UpdateCorrespondentRequest updateCorrespondentRequest)
+        public virtual IActionResult UpdateCorrespondent([FromRoute(Name = "id")][Required] int id, [FromBody] Correspondent updateCorrespondentRequest)
         {
 
-            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(200, default(UpdateCorrespondent200Response));
-            string exampleJson = null;
-            exampleJson = "{\n  \"owner\" : 5,\n  \"matching_algorithm\" : 6,\n  \"user_can_change\" : true,\n  \"document_count\" : 1,\n  \"is_insensitive\" : true,\n  \"name\" : \"name\",\n  \"match\" : \"match\",\n  \"id\" : 0,\n  \"last_correspondence\" : 5,\n  \"slug\" : \"slug\"\n}";
+            var correspondentEntity = _mapper.Map<BusinessLogic.Entities.Correspondent>(updateCorrespondentRequest);
+            var example = _correspondentLogic.UpdateCorrespondent(correspondentEntity);
 
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<UpdateCorrespondent200Response>(exampleJson)
-            : default(UpdateCorrespondent200Response);
-            //TODO: Change the data returned
+
             return new ObjectResult(example);
         }
     }

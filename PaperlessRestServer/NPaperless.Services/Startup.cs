@@ -29,6 +29,9 @@ using BusinessLogic.DataAccessMappingProfile;
 using Microsoft.EntityFrameworkCore;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 using DataAccess.Sql;
+using BusinessLogic.Interfaces;
+using BusinessLogic;
+using DataAccess.Interfaces;
 
 namespace NPaperless.Services
 {
@@ -60,11 +63,15 @@ namespace NPaperless.Services
 
             services.AddDbContext<AppDbContext>(options =>
        options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddScoped<ICorrespondentLogic, CorrespondentLogic>();
+            services.AddScoped<ICorrespondentRepository, CorrespondentRepository>();
         
 
 
-        // Add framework services.
-        services
+
+            // Add framework services.
+            services
                 // Don't need the full MVC stack for an API, see https://andrewlock.net/comparing-startup-between-the-asp-net-core-3-templates/
                 .AddControllers(options => {
                     options.InputFormatters.Insert(0, new InputFormatterStream());
@@ -122,6 +129,8 @@ namespace NPaperless.Services
                            .AllowAnyMethod();
                 });
             });
+
+            
         }
 
         /// <summary>

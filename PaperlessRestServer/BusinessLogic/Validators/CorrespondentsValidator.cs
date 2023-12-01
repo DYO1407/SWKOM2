@@ -18,9 +18,9 @@ namespace BusinessLogic.Validators
             RuleFor(c => c.Slug).NotNull().NotEmpty();
             RuleFor(c => c.Name).NotNull().NotEmpty().WithMessage("Name is Required");
             RuleFor(c => c.Match).NotNull().NotEmpty();
-            RuleFor(c => c.Matching_Algorithm).NotEmpty();
+            //RuleFor(c => c.Matching_Algorithm).NotEmpty();
             RuleFor(c => c.IsInsensitive).NotEmpty();
-            RuleFor(c => c.DocumentCount).NotEmpty();
+            //RuleFor(c => c.DocumentCount).NotEmpty();
             RuleFor(c => c.LastCorrespondence).NotEmpty();
 
 

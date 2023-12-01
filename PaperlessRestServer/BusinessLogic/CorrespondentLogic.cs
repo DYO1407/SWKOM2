@@ -13,6 +13,8 @@ namespace BusinessLogic
     {
         private readonly ICorrespondentRepository _correspondentRepository;
         private readonly IMapper _mapper;
+        private readonly CorrespondentsValidator _validator = new CorrespondentsValidator();
+        
 
         public CorrespondentLogic(ICorrespondentRepository correspondentRepository, IMapper mapper)
         {
@@ -20,37 +22,37 @@ namespace BusinessLogic
             _mapper = mapper;
         }
 
-        public CorrespondentLogic()
-        {
-            
-        }
+     
 
 
-
-        private readonly CorrespondentsValidator _validator = new CorrespondentsValidator();
 
 
 
         public Correspondent CreateCorrespondent(Correspondent newcorrespondent)
         {
             ValidateCorrespondent(newcorrespondent);
+            _correspondentRepository.AddCorrespondent(_mapper.Map<DataAccess.Entities.Correspondent>(newcorrespondent));
 
             return newcorrespondent;
         }
 
         public bool DeleteCorrespondent(int id)
         {
+            _correspondentRepository.DeleteCorrespondent(id);
             return true;
         }
 
         public Correspondent GetCorrespondent(int id)
         {
+            _correspondentRepository.GetCorrespondent(id);
+
             return new Correspondent { Id = id };   
         }
 
         public Correspondent UpdateCorrespondent(Correspondent correspondent)
         {
             ValidateCorrespondent(correspondent);
+            _correspondentRepository.UpdateCorrespondent(_mapper.Map<DataAccess.Entities.Correspondent>(correspondent));
             return correspondent;
         }
 
