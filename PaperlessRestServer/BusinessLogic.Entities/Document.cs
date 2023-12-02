@@ -9,7 +9,7 @@ namespace BusinessLogic.Entities
     public class Document
     {
 
-        public Int32 Id { get; set; }
+        public long Id { get; set; }
         public Correspondent? Correspondent { get; set; }
         public DocumentType? DocumentType { get; set; }
         public Int32? StoragePath { get; set; }

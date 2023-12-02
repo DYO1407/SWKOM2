@@ -4,6 +4,8 @@ using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
+using BusinessLogic.Entities;
+using Document = BusinessLogic.Entities.Document;
 
 namespace BusinessLogic.Interfaces
 {

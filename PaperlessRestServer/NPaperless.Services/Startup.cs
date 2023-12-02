@@ -66,6 +66,10 @@ namespace NPaperless.Services
 
             services.AddScoped<ICorrespondentLogic, CorrespondentLogic>();
             services.AddScoped<ICorrespondentRepository, CorrespondentRepository>();
+
+            services.AddScoped<IDocumentManagementLogic, DocumentManagementLogic>();
+            services.AddScoped<IDManagementRepository, DManagementRepository>();
+
         
 
 

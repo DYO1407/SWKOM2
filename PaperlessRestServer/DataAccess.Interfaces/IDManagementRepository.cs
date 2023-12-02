@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Interfaces
 {
-    public  class IDManagementRepository
+    public  interface IDManagementRepository
     {
-       // Document GetDocument(int id);
-        //bool DeleteDocument(int id);
+       Document GetDocument(int id);
+       void DeleteDocument(int id);
 
-        //Document UpdateDocument(Document doc);
+       Document UpdateDocument(Document doc);
     }
 }
