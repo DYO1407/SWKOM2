@@ -28,3 +28,5 @@ consumer.Received += (model, eventArgs) =>
 };
 
 channel.BasicConsume("uploadDocument", true, consumer);
+
+Console.ReadLine();
