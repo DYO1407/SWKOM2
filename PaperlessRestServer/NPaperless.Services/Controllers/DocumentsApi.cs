@@ -19,9 +19,9 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using Newtonsoft.Json;
 using NPaperless.Services.Attributes;
 using NPaperless.Services.DTOs;
-using System.Linq;
-using BusinessLogic.Entities;
+using AutoMapper;
 using BusinessLogic.Interfaces;
+using BusinessLogic;
 
 namespace NPaperless.Services.Controllers
 { 
@@ -31,11 +31,18 @@ namespace NPaperless.Services.Controllers
     [ApiController]
     public class DocumentsApiController : ControllerBase
     {
-        private readonly IDocumentUploadLogic _documentUploadLogic;
-        DocumentsApiController(IDocumentUploadLogic documentUploadLogic)
+
+        private readonly IMapper _mapper;
+        private  readonly IDocumentManagementLogic _dlogic;
+
+        public DocumentsApiController(IMapper mapper, IDocumentManagementLogic dlogic)
         {
-            _documentUploadLogic = documentUploadLogic;
+            _mapper = mapper;
+            _dlogic = dlogic;
         }
+
+    
+
         /// <summary>
         /// 
         /// </summary>
@@ -66,11 +73,11 @@ namespace NPaperless.Services.Controllers
         [SwaggerOperation("DeleteDocument")]
         public virtual IActionResult DeleteDocument([FromRoute (Name = "id")][Required]int id)
         {
+            _dlogic.DeleteDocument(id);
 
-            //TODO: Uncomment the next line to return response 204 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(204);
+            return Ok();
 
-            throw new NotImplementedException();
+
         }
 
         /// <summary>
@@ -113,16 +120,8 @@ namespace NPaperless.Services.Controllers
         public virtual IActionResult GetDocument([FromRoute (Name = "id")][Required]int id, [FromQuery (Name = "page")]int? page, [FromQuery (Name = "full_perms")]bool? fullPerms)
         {
 
-            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(200, default(GetDocument200Response));
-            string exampleJson = null;
-            exampleJson = "{\n  \"owner\" : 7,\n  \"archive_serial_number\" : 2,\n  \"notes\" : [ {\n    \"note\" : \"note\",\n    \"created\" : \"created\",\n    \"document\" : 1,\n    \"id\" : 7,\n    \"user\" : 1\n  }, {\n    \"note\" : \"note\",\n    \"created\" : \"created\",\n    \"document\" : 1,\n    \"id\" : 7,\n    \"user\" : 1\n  } ],\n  \"added\" : \"added\",\n  \"created\" : \"created\",\n  \"title\" : \"title\",\n  \"content\" : \"content\",\n  \"tags\" : [ 5, 5 ],\n  \"storage_path\" : 5,\n  \"permissions\" : {\n    \"view\" : {\n      \"groups\" : [ 3, 3 ],\n      \"users\" : [ 9, 9 ]\n    },\n    \"change\" : {\n      \"groups\" : [ 3, 3 ],\n      \"users\" : [ 9, 9 ]\n    }\n  },\n  \"archived_file_name\" : \"archived_file_name\",\n  \"modified\" : \"modified\",\n  \"correspondent\" : 6,\n  \"original_file_name\" : \"original_file_name\",\n  \"id\" : 0,\n  \"created_date\" : \"created_date\",\n  \"document_type\" : 1\n}";
-            
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<GetDocument200Response>(exampleJson)
-            : default(GetDocument200Response);
-            //TODO: Change the data returned
-            return new ObjectResult(example);
+
+            return Ok();
         }
 
         /// <summary>
@@ -294,18 +293,11 @@ namespace NPaperless.Services.Controllers
         [ValidateModelState]
         [SwaggerOperation("UpdateDocument")]
         [SwaggerResponse(statusCode: 200, type: typeof(UpdateDocument200Response), description: "Success")]
-        public virtual IActionResult UpdateDocument([FromRoute (Name = "id")][Required]int id, [FromBody]UpdateDocumentRequest updateDocumentRequest)
+        public virtual IActionResult UpdateDocument([FromRoute (Name = "id")][Required]int id, [FromBody]Document updateDocumentRequest)
         {
 
-            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(200, default(UpdateDocument200Response));
-            string exampleJson = null;
-            exampleJson = "{\n  \"owner\" : 7,\n  \"user_can_change\" : true,\n  \"archive_serial_number\" : 2,\n  \"notes\" : [ \"\", \"\" ],\n  \"added\" : \"added\",\n  \"created\" : \"created\",\n  \"title\" : \"title\",\n  \"content\" : \"content\",\n  \"tags\" : [ 5, 5 ],\n  \"storage_path\" : 5,\n  \"archived_file_name\" : \"archived_file_name\",\n  \"modified\" : \"modified\",\n  \"correspondent\" : 6,\n  \"original_file_name\" : \"original_file_name\",\n  \"id\" : 0,\n  \"created_date\" : \"created_date\",\n  \"document_type\" : 1\n}";
-            
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<UpdateDocument200Response>(exampleJson)
-            : default(UpdateDocument200Response);
-            //TODO: Change the data returned
+            var documentEntity = _mapper.Map<BusinessLogic.Entities.Document>(updateDocumentRequest);
+            var example = _dlogic.UpdateDocument(documentEntity);
             return new ObjectResult(example);
         }
 
