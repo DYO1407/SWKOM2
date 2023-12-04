@@ -17,13 +17,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLogic", "BusinessLo
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Paperless.DAL", "Paperless.DAL", "{AAE57A97-57DC-4656-A020-72E2340102C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess.Entities", "DataAccess.Entities\DataAccess.Entities.csproj", "{56A80FA4-4A3C-4403-8F0A-4ECD92DF9B4D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess.Entities", "DataAccess.Entities\DataAccess.Entities.csproj", "{56A80FA4-4A3C-4403-8F0A-4ECD92DF9B4D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess.Interfaces", "DataAccess.Interfaces\DataAccess.Interfaces.csproj", "{8C7A825C-DE09-41A5-ACBF-A1385FEB46E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess.Interfaces", "DataAccess.Interfaces\DataAccess.Interfaces.csproj", "{8C7A825C-DE09-41A5-ACBF-A1385FEB46E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess.Sql", "DataAccess.Sql\DataAccess.Sql.csproj", "{333DB645-26C0-40DB-A283-9465C60A62C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess.Sql", "DataAccess.Sql\DataAccess.Sql.csproj", "{333DB645-26C0-40DB-A283-9465C60A62C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess.Tests", "DataAccess.Tests\DataAccess.Tests.csproj", "{17013F2F-82EA-432D-B685-D5CDAD2D93A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess.Tests", "DataAccess.Tests\DataAccess.Tests.csproj", "{17013F2F-82EA-432D-B685-D5CDAD2D93A8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMQConsumer", "RabbitMQConsumer\RabbitMQConsumer.csproj", "{FDEFB0EE-1173-452D-838A-89AFA1022D40}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,6 +69,10 @@ Global
 		{17013F2F-82EA-432D-B685-D5CDAD2D93A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17013F2F-82EA-432D-B685-D5CDAD2D93A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17013F2F-82EA-432D-B685-D5CDAD2D93A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDEFB0EE-1173-452D-838A-89AFA1022D40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDEFB0EE-1173-452D-838A-89AFA1022D40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDEFB0EE-1173-452D-838A-89AFA1022D40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDEFB0EE-1173-452D-838A-89AFA1022D40}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

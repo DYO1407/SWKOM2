@@ -30,10 +30,10 @@ namespace BusinessLogic
         }
 
        
-        public Document UploadDocument(string title, DateTime? created, int? documentTypeId, List<int> tagIds, int? correspondentId, Stream documentStream)
+        public Document UploadDocument(string title, DateTime? created, int? documentTypeId, List<int> tagIds, int? correspondentId/*, Stream documentStream*/)
         {
-            var streamReader = new StreamReader(documentStream);
-            var documentContent = streamReader.ReadToEnd();
+            //var streamReader = new StreamReader(documentStream);
+            //var documentContent = streamReader.ReadToEnd();
             List<string> tagList = new List<string>();
             tagList.Add(tagIds[0].ToString());
             Correspondent Correspondent = _mapper.Map<BusinessLogic.Entities.Correspondent>(_correspondentRepository.GetCorrespondent((int)correspondentId));
@@ -41,7 +41,7 @@ namespace BusinessLogic
             var document = new BusinessLogic.Entities.Document
             {
                 Title = title,
-                Content = documentContent,
+                //Content = documentContent,
                 CreatedDate = (DateTime)created,
                 Tags = tagList,
                 Correspondent = Correspondent

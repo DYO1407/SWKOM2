@@ -34,11 +34,13 @@ namespace NPaperless.Services.Controllers
 
         private readonly IMapper _mapper;
         private  readonly IDocumentManagementLogic _dlogic;
+        private readonly IDocumentUploadLogic _documentUploadLogic;
 
-        public DocumentsApiController(IMapper mapper, IDocumentManagementLogic dlogic)
+        public DocumentsApiController(IMapper mapper, IDocumentManagementLogic dlogic, IDocumentUploadLogic documentUploadLogic)
         {
             _mapper = mapper;
             _dlogic = dlogic;
+            _documentUploadLogic = documentUploadLogic;
         }
 
     
@@ -322,8 +324,8 @@ namespace NPaperless.Services.Controllers
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200);
 
-            _documentUploadLogic.UploadDocument(title, created, documentType, tags, correspondent, document);
-            throw new NotImplementedException();
+            _documentUploadLogic.UploadDocument(title, created, documentType, tags, correspondent/*,document*/);
+            return Ok();
         }
     }
 }

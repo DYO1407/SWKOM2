@@ -16,8 +16,8 @@ namespace BusinessLogic.Interfaces
             var factory = new ConnectionFactory()
             {
                 HostName = "localhost",
-                UserName = "myuser",
-                Password = "mysecretpassword",
+                UserName = "guest",
+                Password = "guest",
                 VirtualHost = "/"
             };
 
@@ -25,12 +25,12 @@ namespace BusinessLogic.Interfaces
 
             using var channel = connection.CreateModel();
 
-            channel.QueueDeclare("documentUpload", durable: true, exclusive: true);
+            channel.QueueDeclare("uploadDocument", durable: true, exclusive: false);
 
             var jsonString = JsonSerializer.Serialize(message);
             var body = Encoding.UTF8.GetBytes(jsonString);
 
-            channel.BasicPublish("", "documentUpload", body: body);
+            channel.BasicPublish("", "uploadDocument", body: body);
         }
     }
 }
