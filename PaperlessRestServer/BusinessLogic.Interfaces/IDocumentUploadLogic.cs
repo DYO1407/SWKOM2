@@ -9,6 +9,7 @@ namespace BusinessLogic.Interfaces
 {
     public interface IDocumentUploadLogic
     {
-        Task<Document> UploadDocumentAsync(string title, DateTime? created, int? documentTypeId, List<int> tagIds, int? correspondentId, Stream documentStream);
+        public Document UploadDocument(string title, DateTime? created, int? documentTypeId, List<int> tagIds, int? correspondentId, Stream documentStream);
+        //Task<Document> UploadDocumentAsync(string title, DateTime? created, int? documentTypeId, List<int> tagIds, int? correspondentId, Stream documentStream);
     }
 }

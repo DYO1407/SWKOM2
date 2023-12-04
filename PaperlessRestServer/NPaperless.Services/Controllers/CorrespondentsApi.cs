@@ -103,7 +103,7 @@ namespace NPaperless.Services.Controllers
         public virtual IActionResult GetCorrespondents([FromQuery(Name = "page")] int? page, [FromQuery(Name = "full_perms")] bool? fullPerms)
         {
             //var example = _correspondentLogic.GetCorrespondent(id);
-
+                _correspondentLogic.GetCorrespondent((int)page);
             return Ok(); 
         }
 

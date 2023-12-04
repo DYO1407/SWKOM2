@@ -21,19 +21,13 @@ namespace BusinessLogic
             _correspondentRepository = correspondentRepository;
             _mapper = mapper;
         }
-
-     
-
-
-
-
-
-        public Correspondent CreateCorrespondent(Correspondent newcorrespondent)
+        public Correspondent CreateCorrespondent(Correspondent newBLCorrespondent)
         {
-            ValidateCorrespondent(newcorrespondent);
-            _correspondentRepository.AddCorrespondent(_mapper.Map<DataAccess.Entities.Correspondent>(newcorrespondent));
+            ValidateCorrespondent(newBLCorrespondent);
+            var newDALCorrespondent = _mapper.Map<DataAccess.Entities.Correspondent>(newBLCorrespondent);
+            _correspondentRepository.AddCorrespondent(newDALCorrespondent);
 
-            return newcorrespondent;
+            return newBLCorrespondent;
         }
 
         public bool DeleteCorrespondent(int id)
@@ -42,11 +36,10 @@ namespace BusinessLogic
             return true;
         }
 
-        public Correspondent GetCorrespondent(int id)
+        public Correspondent GetCorrespondent(int page)
         {
-            _correspondentRepository.GetCorrespondent(id);
-
-            return new Correspondent { Id = id };   
+            var correspondent = _mapper.Map<BusinessLogic.Entities.Correspondent>(_correspondentRepository.GetCorrespondent(page));
+            return correspondent;   
         }
 
         public Correspondent UpdateCorrespondent(Correspondent correspondent)

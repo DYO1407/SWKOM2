@@ -11,6 +11,8 @@ services:
       - "8080:8080" # Expose the server on port 8000
     networks: 
       - app-network
+    depends_on:
+      - postgres
 
   ui:
     build: PaperlessUI/
@@ -36,6 +38,15 @@ services:
       - "5432:5432"
     volumes:
       - my_dbdata:/var/lib/postgresql/data
+
+  rabbitmq:
+    container_name: "rabbitmq"
+    image: rabbitmq:3.8-management-alpine
+    ports:
+        #RabbitMQ instance
+      - '5672:5672'
+        #Web Interface
+      - '15672:15672' 
 
 volumes:
   server-data:

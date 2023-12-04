@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace BusinessLogic.Interfaces
 {
-    public interface IDocumentSearchLogic
+    public interface IMessageLogic
     {
-        //public Document SearchById(int id);
+        public void SendingMessage<T>(T message);
     }
 }

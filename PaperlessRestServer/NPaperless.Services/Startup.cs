@@ -65,8 +65,9 @@ namespace NPaperless.Services
        options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<ICorrespondentLogic, CorrespondentLogic>();
+            services.AddScoped<IDocumentUploadLogic, DocumentUploadLogic>();
             services.AddScoped<ICorrespondentRepository, CorrespondentRepository>();
-        
+            services.AddScoped<IMessageLogic, MessageLogic>();
 
 
 

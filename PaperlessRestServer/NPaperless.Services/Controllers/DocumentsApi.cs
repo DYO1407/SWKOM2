@@ -19,6 +19,9 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using Newtonsoft.Json;
 using NPaperless.Services.Attributes;
 using NPaperless.Services.DTOs;
+using System.Linq;
+using BusinessLogic.Entities;
+using BusinessLogic.Interfaces;
 
 namespace NPaperless.Services.Controllers
 { 
@@ -27,7 +30,12 @@ namespace NPaperless.Services.Controllers
     /// </summary>
     [ApiController]
     public class DocumentsApiController : ControllerBase
-    { 
+    {
+        private readonly IDocumentUploadLogic _documentUploadLogic;
+        DocumentsApiController(IDocumentUploadLogic documentUploadLogic)
+        {
+            _documentUploadLogic = documentUploadLogic;
+        }
         /// <summary>
         /// 
         /// </summary>
@@ -322,6 +330,7 @@ namespace NPaperless.Services.Controllers
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200);
 
+            _documentUploadLogic.UploadDocument(title, created, documentType, tags, correspondent, document);
             throw new NotImplementedException();
         }
     }
