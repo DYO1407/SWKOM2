@@ -12,7 +12,7 @@ using BusinessLogic.Entities;
 using Document = BusinessLogic.Entities.Document;
 using DataAccess.Entities;
 using FluentValidation;
-using BusinessLogic.Interfaces;
+using AutoMapper;
 
 
 namespace BusinessLogic

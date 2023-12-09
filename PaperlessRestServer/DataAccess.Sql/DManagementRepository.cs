@@ -51,7 +51,12 @@ namespace DataAccess.Sql
             throw new ArgumentException("Document not found");
         }
 
-     
-    
+        public Document AddDocument(Document doc)
+        {
+            _context.Documents.Add(doc);
+            _context.SaveChanges();
+
+            return doc; 
+        }
     }
 }

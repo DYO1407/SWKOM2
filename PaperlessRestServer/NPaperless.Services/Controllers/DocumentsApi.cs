@@ -22,6 +22,8 @@ using NPaperless.Services.DTOs;
 using AutoMapper;
 using BusinessLogic.Interfaces;
 using BusinessLogic;
+using System.Linq;
+using System.IO;
 
 namespace NPaperless.Services.Controllers
 { 
@@ -34,11 +36,13 @@ namespace NPaperless.Services.Controllers
 
         private readonly IMapper _mapper;
         private  readonly IDocumentManagementLogic _dlogic;
+        private readonly IDocumentUploadLogic _uploadLogic;
 
-        public DocumentsApiController(IMapper mapper, IDocumentManagementLogic dlogic)
+        public DocumentsApiController(IMapper mapper, IDocumentManagementLogic dlogic, IDocumentUploadLogic uploadLogic)
         {
             _mapper = mapper;
             _dlogic = dlogic;
+            _uploadLogic = uploadLogic;
         }
 
     
@@ -293,7 +297,7 @@ namespace NPaperless.Services.Controllers
         [ValidateModelState]
         [SwaggerOperation("UpdateDocument")]
         [SwaggerResponse(statusCode: 200, type: typeof(UpdateDocument200Response), description: "Success")]
-        public virtual IActionResult UpdateDocument([FromRoute (Name = "id")][Required]int id, [FromBody]Document updateDocumentRequest)
+        public virtual IActionResult UpdateDocument([FromRoute (Name = "id")][Required]int id, [FromBody] Document updateDocumentRequest)
         {
 
             var documentEntity = _mapper.Map<BusinessLogic.Entities.Document>(updateDocumentRequest);
@@ -316,14 +320,39 @@ namespace NPaperless.Services.Controllers
         [Consumes("multipart/form-data")]
         [ValidateModelState]
         [SwaggerOperation("UploadDocument")]
-        public virtual IActionResult UploadDocument([FromForm (Name = "title")]string title, [FromForm (Name = "created")]DateTime? created, [FromForm (Name = "document_type")]int? documentType, [FromForm (Name = "tags")]List<int> tags, [FromForm (Name = "correspondent")]int? correspondent, [FromForm (Name = "document")]List<System.IO.Stream> document)
+        public virtual IActionResult UploadDocument([FromForm (Name = "title")]string title, [FromForm (Name = "created")]DateTime? created, [FromForm (Name = "document_type")]int? documentType, [FromForm (Name = "tags")]List<int> tags, [FromForm (Name = "correspondent")]int? correspondent, [FromForm (Name = "document")]List<IFormFile> document)
         {
 
-            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(200);
 
-            _documentUploadLogic.UploadDocument(title, created, documentType, tags, correspondent, document);
-            throw new NotImplementedException();
+            if (document == null || !document.Any())
+            {
+                return BadRequest("No document uploaded.");
+            }
+
+            var firstFile = document.First();
+            using var memoryStream = new MemoryStream();
+            firstFile.CopyTo(memoryStream);
+            byte[] fileContent = memoryStream.ToArray();
+
+            var doc = new BusinessLogic.Entities.Document
+
+            {
+                
+                Title = title,
+                Created = created,
+                DocumentType = documentType,
+                Correspondent = correspondent,
+                Tags = tags,
+                Documentfile = fileContent
+
+
+            };
+
+            var newDoc = _uploadLogic.UploadDocument(doc);    
+
+
+
+            return Ok(newDoc);
         }
     }
 }

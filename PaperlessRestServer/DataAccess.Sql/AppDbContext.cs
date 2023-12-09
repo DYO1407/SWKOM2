@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿
+using Microsoft.EntityFrameworkCore;
 using DataAccess.Entities;
-using System.Reflection.Metadata;
+using Document = DataAccess.Entities.Document;
 
 namespace DataAccess.Sql
 
@@ -10,12 +11,15 @@ namespace DataAccess.Sql
 
         public AppDbContext(DbContextOptions<AppDbContext>? options) : base(options) { }
 
-        public DbSet<Correspondent>? Correspondents { get; set; }
-        public DbSet<Entities.Document>? Documents { get; set; }
-        public DbSet<DocumentType>? DocumentTypes { get; set; }
-        public DbSet<DocumentTag>? DocumentTags { get; set; }
+        public DbSet<Correspondent> Correspondents { get; set; }
+        public DbSet<Document> Documents { get; set; }
 
-        public DbSet<User>? Users{ get; set; }
+        public DbSet<DocumentTag> DocumentTags { get; set; }    
+
+        public DbSet<DocumentType> DocumentTypes { get; set; }
+
+        public DbSet<User> Users { get; set; }
+     
 
     }
 }

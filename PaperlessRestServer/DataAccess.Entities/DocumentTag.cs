@@ -12,7 +12,7 @@ namespace DataAccess.Entities
     public class DocumentTag
     {
         [Key]
-        public Int64 Id { get; set; }
+        public int Id { get; set; }
 
         public string? Slug { get; set; }
 
@@ -22,12 +22,12 @@ namespace DataAccess.Entities
 
         public string? Match { get; set; }
 
-        public Int64 MatchingAlgorithm { get; set; }
+        public int MatchingAlgorithm { get; set; }
 
         public bool IsInsensitive { get; set; }
 
         public bool IsInboxTag { get; set; }
 
-        public Int64 DocumentCount { get; set; }
+        public int DocumentCount { get; set; }
     }
 }

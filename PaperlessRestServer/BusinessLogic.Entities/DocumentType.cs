@@ -18,5 +18,9 @@ namespace BusinessLogic.Entities
 
         public bool IsInsensitive { get; set; }
         public Int64 DocumentCount { get; set; }
+
+        public Int32 owner {  get; set; }
+
+        public bool  user_can_change { get; set; }
     }
 }

@@ -18,38 +18,32 @@ namespace BusinessLogic
         //private readonly IDocumentRepository _documentRepository;
         //private readonly ITagRepository _tagRepository;
         private readonly IMessageLogic _messageLogic;
-        private readonly ICorrespondentRepository _correspondentRepository;
+        private readonly IDManagementRepository _dManagementRepository;
         private readonly IMapper _mapper;
-        public DocumentUploadLogic(IMessageLogic messageLogic, ICorrespondentRepository correspondentRepository, IMapper mapper/*IDocumentRepository documentRepository, ITagRepository tagRepository*/)
+        public DocumentUploadLogic(IMessageLogic messageLogic, IDManagementRepository dmanagementRepository, IMapper mapper/*IDocumentRepository documentRepository, ITagRepository tagRepository*/)
         { 
             _messageLogic = messageLogic;
-            _correspondentRepository = correspondentRepository;
+            _dManagementRepository = dmanagementRepository;
             _mapper = mapper;
             //_documentRepository = documentRepository;
             //_tagRepository = tagRepository;
         }
 
        
-        public Document UploadDocument(string title, DateTime? created, int? documentTypeId, List<int> tagIds, int? correspondentId, Stream documentStream)
+        public Document UploadDocument(Document doc)
         {
-            var streamReader = new StreamReader(documentStream);
-            var documentContent = streamReader.ReadToEnd();
-            List<string> tagList = new List<string>();
-            tagList.Add(tagIds[0].ToString());
-            Correspondent Correspondent = _mapper.Map<BusinessLogic.Entities.Correspondent>(_correspondentRepository.GetCorrespondent((int)correspondentId));
 
-            var document = new BusinessLogic.Entities.Document
-            {
-                Title = title,
-                Content = documentContent,
-                CreatedDate = (DateTime)created,
-                Tags = tagList,
-                Correspondent = Correspondent
-            };
 
-            _messageLogic.SendingMessage<Document>(document);
+            var newDALDoc = _mapper.Map<DataAccess.Entities.Document>(doc);
+
+
+
+
+
+            _dManagementRepository.AddDocument(newDALDoc);
+            _messageLogic.SendingMessage<Document>(doc);
             //return _documentRepository.UploadDocumentAsync(document);
-            return document;
+            return doc;
         }
 
         //Task<Document> UploadDocumentAsync(string title, DateTime? created, int? documentTypeId, List<int> tagIds, int? correspondentId, Stream documentStream)

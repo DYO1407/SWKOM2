@@ -12,14 +12,18 @@ namespace DataAccess.Entities
     public class DocumentType
     {
         [Key]
-        public Int64 Id { get; set; }
+        public int Id { get; set; }
         public string? Slug { get; set; }
         public string? Name { get; set; }
 
         public string? Match { get; set; }
-        public Int64? MatchingAlgorithm { get; set; }
+        public int? MatchingAlgorithm { get; set; }
 
         public bool IsInsensitive { get; set; }
-        public Int64 DocumentCount { get; set; }
+        public int DocumentCount { get; set; }
+
+        public int owner { get; set; }
+
+        public bool user_can_change { get; set; }
     }
 }

@@ -14,24 +14,24 @@ services:
     depends_on:
       - postgres
 
-  ui:
-    build: PaperlessUI/
-    container_name: my-ui
-    volumes:
-      - ui-data:/var/www
-    ports:
-      - "4200:4200" # Expose the UI on port 80
-    depends_on:
-      - server
-    networks: 
-      - app-network
+  #ui:
+    #build: PaperlessUI/
+    #container_name: my-ui
+    #volumes:
+     # - ui-data:/var/www
+    #ports:
+     # - "4200:4200" # Expose the UI on port 80
+    #depends_on:
+     # - server
+    #networks: 
+     # - app-network
 
 
   postgres:
     image: postgres:latest
     restart: always
     environment:
-      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_PASSWORD: newpassword
       POSTGRES_USER: myuser
       POSTGRES_DB: mydatabase
     ports:

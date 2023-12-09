@@ -1,5 +1,6 @@
 ﻿using Xunit;
 using AutoMapper;
+using BusinessLogic.Entities;
 using BusinessLogic.DataAccessMappingProfile;
 
 namespace DataAccess.Tests
@@ -37,7 +38,8 @@ namespace DataAccess.Tests
 
                 // Assert
                 Assert.NotNull(blCorrespondent);
-                Assert.Equal(dalCorrespondent.Name, blCorrespondent.Name);            }
+                Assert.Equal(dalCorrespondent.Name, blCorrespondent.Name); 
+            }
 
             [Fact]
             public void Should_Map_Correspondent_From_BL_To_DAL_Correctly()
@@ -55,6 +57,26 @@ namespace DataAccess.Tests
                 // Assert
                 Assert.NotNull(dalCorrespondent);
                 Assert.Equal(dalCorrespondent.Name, blCorrespondent.Name);
+            }
+
+            [Fact]
+            public void Should_Map_Document_From_DAL_To_BL_Correctly()
+            {
+
+
+                // Arrange
+                var dalDocument = new DataAccess.Entities.Document
+                {
+                    Id = 7,
+                    
+                };
+
+                // Act
+                var blDocument = _mapper.Map<BusinessLogic.Entities.Document>(dalDocument);
+
+                // Assert
+                Assert.NotNull(blDocument);
+                Assert.Equal(dalDocument.Id, blDocument.Id);
             }
 
         }

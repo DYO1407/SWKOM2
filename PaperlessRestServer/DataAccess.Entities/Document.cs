@@ -13,15 +13,15 @@ namespace DataAccess.Entities
     public  class Document
     {
         [Key]
-        public long Id { get; set; }
-        public Correspondent? Correspondent { get; set; }
-        public DocumentType? DocumentType { get; set; }
-        public long? StoragePath { get; set; }
+        public int Id { get; set; }
+        public int Correspondent { get; set; }
+        public int DocumentType { get; set; }
+        public int? StoragePath { get; set; }
 
         public string? Title { get; set; }
         public string? Content { get; set; }
-        public List<string> Tags { get; set; } = new List<string>();
-
+        public List<int> Tags { get; set; } = new List<int>();
+        public byte[] Documentfile { get; set; }
         public DateTime Created { get; set; }
 
         public DateTime CreatedDate { get; set; }

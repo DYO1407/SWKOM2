@@ -9,17 +9,18 @@ namespace BusinessLogic.Entities
     public class Document
     {
 
-        public long Id { get; set; }
-        public Correspondent? Correspondent { get; set; }
-        public DocumentType? DocumentType { get; set; }
-        public Int32? StoragePath { get; set; }
+        public int Id { get; set; }
+        public int? Correspondent { get; set; }
+        public int? DocumentType { get; set; }
+        public int? StoragePath { get; set; }
 
         public string? Title { get; set; }
         public string? Content { get; set; }
-        public List<string> Tags { get; set; } = new List<string>();
+        public List<int> Tags { get; set; } = new List<int>();
 
-        public DateTime Created { get; set; }
+        public DateTime? Created { get; set; }
 
+        public byte[] Documentfile { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime Modified { get; set; }
         public DateTime Added { get; set; }
