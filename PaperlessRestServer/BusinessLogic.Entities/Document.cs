@@ -17,10 +17,10 @@ namespace BusinessLogic.Entities
         public string? Title { get; set; }
         public string? Content { get; set; }
         public List<int> Tags { get; set; } = new List<int>();
+        public byte[] Documentfile { get; set; }
 
         public DateTime? Created { get; set; }
 
-        public byte[] Documentfile { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime Modified { get; set; }
         public DateTime Added { get; set; }

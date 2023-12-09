@@ -69,6 +69,12 @@ namespace NPaperless.Services.DTOs
         public List<int> Tags { get; set; }
 
         /// <summary>
+        /// Gets or Sets Documentfile
+        /// </summary>
+
+        [DataMember(Name = "documentfile", EmitDefaultValue = true)]
+        public byte[] Documentfile { get; set; }
+        /// <summary>
         /// Gets or Sets Created
         /// </summary>
         [DataMember(Name="created", EmitDefaultValue=false)]

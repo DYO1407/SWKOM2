@@ -79,7 +79,7 @@ namespace NPaperless.Services.Controllers
         {
             _dlogic.DeleteDocument(id);
 
-            return Ok();
+            return Ok(true);
 
 
         }
@@ -121,11 +121,13 @@ namespace NPaperless.Services.Controllers
         [ValidateModelState]
         [SwaggerOperation("GetDocument")]
         [SwaggerResponse(statusCode: 200, type: typeof(GetDocument200Response), description: "Success")]
-        public virtual IActionResult GetDocument([FromRoute (Name = "id")][Required]int id, [FromQuery (Name = "page")]int? page, [FromQuery (Name = "full_perms")]bool? fullPerms)
-        {
+        public virtual IActionResult GetDocument([FromRoute (Name = "id")][Required]int id)
+        {   
+                var doc= _dlogic.GetDocument(id);
+            
 
 
-            return Ok();
+            return Ok(doc);
         }
 
         /// <summary>
