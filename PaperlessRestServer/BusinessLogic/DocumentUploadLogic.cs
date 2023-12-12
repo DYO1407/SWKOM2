@@ -35,12 +35,7 @@ namespace BusinessLogic
 
 
             var newDALDoc = _mapper.Map<DataAccess.Entities.Document>(doc);
-
-
-
-
-
-            _dManagementRepository.AddDocument(newDALDoc);
+            //_dManagementRepository.AddDocument(newDALDoc);
             _messageLogic.SendingMessage<Document>(doc);
             //return _documentRepository.UploadDocumentAsync(document);
             return doc;

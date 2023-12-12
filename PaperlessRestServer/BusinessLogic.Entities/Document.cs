@@ -14,7 +14,7 @@ namespace BusinessLogic.Entities
         public int? DocumentType { get; set; }
         public int? StoragePath { get; set; }
 
-        public string? Title { get; set; }
+        public string Title { get; set; }
         public string? Content { get; set; }
         public List<int> Tags { get; set; } = new List<int>();
         public byte[] Documentfile { get; set; }
