@@ -34,22 +34,27 @@ consumer.Received += (model, eventArgs) =>
     var body = eventArgs.Body.ToArray();
     var message = Encoding.UTF8.GetString(body);
 
-    Console.WriteLine(message);
+    string input = Path.GetFileNameWithoutExtension(message);
+    ProcessImage(input + ".pdf");
+
+    var result = handleMessage(message);
+
+    Console.WriteLine(result);
 };
 
 channel.BasicConsume("uploadDocument", true, consumer);
 
-Console.WriteLine();
-/*string input = Path.GetFileNameWithoutExtension(message);
-ProcessImage(input + ".pdf");
-TesseractEngine engine = new TesseractEngine("./tessdata", "eng", EngineMode.Default);
-Page page = engine.Process(Pix.LoadFromMemory(File.ReadAllBytes(input + ".jpg")), PageSegMode.Auto); ;
-string result = page.GetText();
+Console.ReadLine();
 
-Console.WriteLine(result);*/
+string handleMessage(string title)
+{
+    TesseractEngine engine = new TesseractEngine("./tessdata", "eng", EngineMode.Default);
+    Page page = engine.Process(Pix.LoadFromMemory(File.ReadAllBytes(title.Replace("\"", "") + ".jpg")), PageSegMode.Auto);
+    string result = page.GetText();
+    return result;
+}
 
-/*void ProcessImage(string inputPDFFile)
-
+void ProcessImage(string inputPDFFile)
 {   
     var filename = Path.GetFileNameWithoutExtension(inputPDFFile);
     string ghostScriptPath = @"C:\Program Files\gs\gs10.02.1\bin\gswin64.exe";
@@ -57,9 +62,8 @@ Console.WriteLine(result);*/
     Process proc = new Process();
     proc.StartInfo.FileName = ghostScriptPath;
     proc.StartInfo.Arguments = ars;
-    proc.StartInfo.CreateNoWindow = false;
+    proc.StartInfo.CreateNoWindow = true;
     proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
     proc.Start();
     proc.WaitForExit();
-    
-}*/
+}
