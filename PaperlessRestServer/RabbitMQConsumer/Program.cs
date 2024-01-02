@@ -58,7 +58,7 @@ void ProcessImage(string inputPDFFile)
 {   
     var filename = Path.GetFileNameWithoutExtension(inputPDFFile);
     string ghostScriptPath = @"C:\Program Files\gs\gs10.02.1\bin\gswin64.exe";
-    String ars = "-dNOPAUSE -sDEVICE=jpeg -r102.4 -o" + "C:\\Users\\smile\\source\\repos\\SWKOM2\\PaperlessRestServer\\RabbitMQConsumer\\" + filename + ".jpg -sPAPERSIZE=a4 " + "C:\\Users\\smile\\source\\repos\\SWKOM2\\PaperlessRestServer\\RabbitMQConsumer\\" + inputPDFFile;
+    String ars = "-dNOPAUSE -sDEVICE=jpeg -r102.4 -o" + "C:\\Users\\deyaa\\source\\repos\\SWKOM2\\PaperlessRestServer\\RabbitMQConsumer\\" + filename + ".jpg -sPAPERSIZE=a4 " + "C:\\Users\\deyaa\\source\\repos\\SWKOM2\\PaperlessRestServer\\RabbitMQConsumer\\" + inputPDFFile;
     Process proc = new Process();
     proc.StartInfo.FileName = ghostScriptPath;
     proc.StartInfo.Arguments = ars;
