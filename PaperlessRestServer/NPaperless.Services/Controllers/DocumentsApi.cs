@@ -24,6 +24,8 @@ using BusinessLogic.Interfaces;
 using BusinessLogic;
 using System.Linq;
 using System.IO;
+using Microsoft.Extensions.Logging;
+
 
 namespace NPaperless.Services.Controllers
 { 
@@ -78,7 +80,7 @@ namespace NPaperless.Services.Controllers
         public virtual IActionResult DeleteDocument([FromRoute (Name = "id")][Required]int id)
         {
             _dlogic.DeleteDocument(id);
-
+            
             return Ok(true);
 
 

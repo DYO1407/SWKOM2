@@ -15,8 +15,6 @@ namespace DataAccess.Sql
         {
             _context = context;
             _context.Database.EnsureCreated();
-
-
         }
 
 
