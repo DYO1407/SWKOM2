@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 using System;
 using System.Collections;
@@ -11,6 +12,11 @@ namespace BusinessLogic.Interfaces
 {
     public class MessageLogic : IMessageLogic
     {
+        private readonly ILogger<MessageLogic> _logger;   
+        public MessageLogic(ILogger<MessageLogic> logger) 
+        { 
+            _logger = logger;
+        }
         public void SendingMessage<T>(T message)
         {
             var factory = new ConnectionFactory()
@@ -25,12 +31,15 @@ namespace BusinessLogic.Interfaces
 
             using var channel = connection.CreateModel();
 
+            _logger.LogInformation("Connection to RabbitMQ established");
+
             channel.QueueDeclare("uploadDocument", durable: true, exclusive: false);
 
             var jsonString = JsonSerializer.Serialize(message);
             var body = Encoding.UTF8.GetBytes(jsonString);
 
             channel.BasicPublish("", "uploadDocument", body: body);
+            _logger.LogInformation($"successfully produced {jsonString} to uploadDocument queue");
         }
     }
 }

@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using DataAccess.Interfaces;
 using AutoMapper;
+using Microsoft.Extensions.Logging;
+using System.Text.Json;
 
 namespace BusinessLogic
 {
@@ -20,11 +22,14 @@ namespace BusinessLogic
         private readonly IMessageLogic _messageLogic;
         private readonly IDManagementRepository _dManagementRepository;
         private readonly IMapper _mapper;
-        public DocumentUploadLogic(IMessageLogic messageLogic, IDManagementRepository dmanagementRepository, IMapper mapper/*IDocumentRepository documentRepository, ITagRepository tagRepository*/)
+        private readonly ILogger<DocumentUploadLogic> _logger;
+        public DocumentUploadLogic(IMessageLogic messageLogic, IDManagementRepository dmanagementRepository, IMapper mapper, ILogger<DocumentUploadLogic> logger/*IDocumentRepository documentRepository, ITagRepository tagRepository*/)
         { 
             _messageLogic = messageLogic;
             _dManagementRepository = dmanagementRepository;
             _mapper = mapper;
+            _logger = logger;
+            _logger.LogInformation("DocumentLogic initialized");
             //_documentRepository = documentRepository;
             //_tagRepository = tagRepository;
         }
@@ -32,13 +37,21 @@ namespace BusinessLogic
        
         public Document UploadDocument(Document doc)
         {
-
-
-            var newDALDoc = _mapper.Map<DataAccess.Entities.Document>(doc);
-            _dManagementRepository.AddDocument(newDALDoc);
-            _messageLogic.SendingMessage<String>(doc.Title);
+            Document document = new Document();
+            try
+            {
+                var newDALDoc = _mapper.Map<DataAccess.Entities.Document>(doc);
+                document = _mapper.Map<BusinessLogic.Entities.Document>(_dManagementRepository.AddDocument(newDALDoc));
+                _messageLogic.SendingMessage<Document>(document);
+                _logger.LogInformation($"New Document { JsonSerializer.Serialize(document) }");
+            }
+            catch ( Exception ex )
+            {
+                _logger.LogError($"Uploading Document { JsonSerializer.Serialize(doc) }");
+            }
+            
             //return _documentRepository.UploadDocumentAsync(document);
-            return doc;
+            return document;
         }
 
         //Task<Document> UploadDocumentAsync(string title, DateTime? created, int? documentTypeId, List<int> tagIds, int? correspondentId, Stream documentStream)

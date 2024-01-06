@@ -12,7 +12,9 @@ using BusinessLogic.Entities;
 using Document = BusinessLogic.Entities.Document;
 using DataAccess.Entities;
 using FluentValidation;
+using Microsoft.Extensions.Logging;
 using AutoMapper;
+using System.Text.Json;
 
 
 namespace BusinessLogic
@@ -22,33 +24,65 @@ namespace BusinessLogic
 
         private readonly IDManagementRepository _docRepository;
         private readonly IMapper _mapper;
+        private readonly ILogger<DocumentManagementLogic> _logger;
         private readonly DocumentValidator _validator = new DocumentValidator();
 
-        public DocumentManagementLogic(IDManagementRepository documentRepository, IMapper mapper)
+        public DocumentManagementLogic(IDManagementRepository documentRepository, IMapper mapper, ILogger<DocumentManagementLogic> logger)
         {
             _docRepository = documentRepository;
             _mapper = mapper;
-            
+            _logger = logger;
+            _logger.LogInformation("DocumentManagementLogic inizialized");
         }
 
         public bool DeleteDocument(int id)
         {
-            _docRepository.DeleteDocument(id);
+            try
+            {
+                _docRepository.DeleteDocument(id);
+                _logger.LogInformation($"Document with ID: {id} successfully deleted");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Document with ID: {id} could not be deleted");
+                
+            }
             return true;
         }
 
         public Document GetDocument(int id)
-        { 
-            _docRepository.GetDocument(id);
-
-            
-            return new Document { Id = id };
+        {
+            Document document = new Document();
+            try 
+            {
+                document = _mapper.Map<BusinessLogic.Entities.Document>(_docRepository.GetDocument(id));
+                _logger.LogInformation($"Found Document { JsonSerializer.Serialize(document) }");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"No Document with ID {id} found");
+            }
+            return document;
         }
 
         public Document UpdateDocument(Document doc)
         {
-            ValidateDocument(doc);
-            _docRepository.UpdateDocument(_mapper.Map<DataAccess.Entities.Document>(doc));
+            Document document = new Document();
+            try
+            {
+                ValidateDocument(doc);
+                DataAccess.Entities.Document DADoc = _docRepository.UpdateDocument(_mapper.Map<DataAccess.Entities.Document>(doc));
+                document = _mapper.Map<BusinessLogic.Entities.Document>(DADoc);
+                _logger.LogInformation($"Document updated: {document}");
+            }
+            catch(ValidationException ex)
+            {
+                _logger.LogError("Validation failed");
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError($"Document {JsonSerializer.Serialize(doc) } could not be updated");
+            }
             return doc;
         }
 
