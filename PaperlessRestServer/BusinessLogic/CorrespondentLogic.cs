@@ -8,6 +8,7 @@ using DataAccess.Interfaces;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
+using BusinessLogic.Exceptions;
 
 namespace BusinessLogic
 {

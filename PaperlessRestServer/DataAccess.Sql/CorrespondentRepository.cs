@@ -6,6 +6,7 @@ using DataAccess.Entities;
 using DataAccess.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using DataAccess.Exceptions;
 
 namespace DataAccess.Sql
 {
@@ -33,7 +34,8 @@ namespace DataAccess.Sql
             catch (Exception ex)
             {
                 _logger.LogError($"Correspondent {JsonSerializer.Serialize(correspondent)} could not be added to database");
-            }
+                throw new DatabaseException($"Could not add correspondent to Database", ex);
+            } 
         }
 
         public void DeleteCorrespondent(long id)
@@ -45,19 +47,19 @@ namespace DataAccess.Sql
                 {
                     _context.Correspondents.Remove(correspondent);
                     _context.SaveChanges();
-                    _logger.LogInformation($"Correspondent with ID {id} successfully deleted");
 
                 }
                 catch (Exception ex)
                 {
                     _logger.LogError($"Correspondent with ID {id} could not be deleted");
+                    throw new DatabaseException($"Correspondent with ID {id} could not be deleted", ex);
                 }
-                
+                _logger.LogInformation($"Correspondent with ID {id} successfully deleted");
             }
             else
             {
                 _logger.LogWarning($"No correspondent with ID {id} in database");
-                throw new Exception(id.ToString());
+                throw new CorrespondentNotFoundException(id.ToString());
             }
         }
 
@@ -83,7 +85,7 @@ namespace DataAccess.Sql
             else
             {
                 _logger.LogWarning($"No Correspondent found with ID {id}");
-                throw new Exception(id.ToString());
+                throw new CorrespondentNotFoundException(id.ToString());
             }
         }
 
