@@ -60,7 +60,7 @@ namespace NPaperless.Services.Controllers
             try
             {
                 _correspondentLogic.CreateCorrespondent(correspondentEntity);
-                _logger.LogInformation($"Created new Correspondet {JsonSerializer.Serialize(correspondentEntity)}");
+                _logger.LogInformation($"Created new Correspondet {System.Text.Json.JsonSerializer.Serialize(correspondentEntity)}");
 
             }
             catch(Exception ex)
@@ -123,7 +123,7 @@ namespace NPaperless.Services.Controllers
 
             var correspondentEntity = _mapper.Map<BusinessLogic.Entities.Correspondent>(updateCorrespondentRequest);
             var example = _correspondentLogic.UpdateCorrespondent(correspondentEntity);
-            _logger.LogInformation($"Correspondent updated to {JsonSerializer.Serialize(correspondentEntity)}");
+            _logger.LogInformation($"Correspondent updated to {System.Text.Json.JsonSerializer.Serialize(correspondentEntity)}");
 
             return new ObjectResult(example);
         }
