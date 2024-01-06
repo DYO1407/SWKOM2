@@ -8,12 +8,38 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="tessdata\script\**" />
+    <EmbeddedResource Remove="tessdata\script\**" />
+    <None Remove="tessdata\script\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="RabbitMQ.Client" Version="6.7.0" />
     <PackageReference Include="Tesseract" Version="5.2.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="tessdata\script\" />
+    <None Remove="C:\Users\deyaa\.nuget\packages\tesseract\5.2.0\build\\..\x64\leptonica-1.82.0.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\deyaa\.nuget\packages\tesseract\5.2.0\build\\..\x64\tesseract50.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\deyaa\.nuget\packages\tesseract\5.2.0\build\\..\x64\leptonica-1.82.0.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\deyaa\.nuget\packages\tesseract\5.2.0\build\\..\x64\tesseract50.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\deyaa\.nuget\packages\tesseract\5.2.0\build\\..\x64\leptonica-1.82.0.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\deyaa\.nuget\packages\tesseract\5.2.0\build\\..\x64\tesseract50.dll" />
   </ItemGroup>
 
 </Project>

@@ -32,6 +32,7 @@ using DataAccess.Sql;
 using BusinessLogic.Interfaces;
 using BusinessLogic;
 using DataAccess.Interfaces;
+using MinIOFileStorageService;
 
 namespace NPaperless.Services
 {
@@ -62,7 +63,10 @@ namespace NPaperless.Services
         {
 
             services.AddDbContext<AppDbContext>(options =>
-       options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+            options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddSingleton<IMinIOService,MinIOService>(provider =>
+            new MinIOService("testbucket","localhost:9000", "admin", "adminpassword"));
 
             services.AddScoped<ICorrespondentLogic, CorrespondentLogic>();
             services.AddScoped<IDocumentUploadLogic, DocumentUploadLogic>();

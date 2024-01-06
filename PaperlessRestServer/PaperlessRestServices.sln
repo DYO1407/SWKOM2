@@ -25,7 +25,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess.Sql", "DataAcces
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess.Tests", "DataAccess.Tests\DataAccess.Tests.csproj", "{17013F2F-82EA-432D-B685-D5CDAD2D93A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMQConsumer", "RabbitMQConsumer\RabbitMQConsumer.csproj", "{FDEFB0EE-1173-452D-838A-89AFA1022D40}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RabbitMQConsumer", "RabbitMQConsumer\RabbitMQConsumer.csproj", "{FDEFB0EE-1173-452D-838A-89AFA1022D40}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinIOService", "MinIOService\MinIOService.csproj", "{E86364EB-4408-4798-95DD-48B3B723EC7A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -73,6 +75,10 @@ Global
 		{FDEFB0EE-1173-452D-838A-89AFA1022D40}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FDEFB0EE-1173-452D-838A-89AFA1022D40}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FDEFB0EE-1173-452D-838A-89AFA1022D40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E86364EB-4408-4798-95DD-48B3B723EC7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E86364EB-4408-4798-95DD-48B3B723EC7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E86364EB-4408-4798-95DD-48B3B723EC7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E86364EB-4408-4798-95DD-48B3B723EC7A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
