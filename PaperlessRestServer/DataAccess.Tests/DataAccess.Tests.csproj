@@ -20,8 +20,11 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\BusinessLogic.Entities\BusinessLogic.Entities.csproj" />
+	  <ProjectReference Include="..\BusinessLogic.Interfaces\BusinessLogic.Interfaces.csproj" />
 	  <ProjectReference Include="..\BusinessLogic\BusinessLogic.csproj" />
 	  <ProjectReference Include="..\DataAccess.Entities\DataAccess.Entities.csproj" />
+	  <ProjectReference Include="..\DataAccess.Interfaces\DataAccess.Interfaces.csproj" />
+	  <ProjectReference Include="..\DataAccess.Sql\DataAccess.Sql.csproj" />
 	</ItemGroup>
 
 </Project>
