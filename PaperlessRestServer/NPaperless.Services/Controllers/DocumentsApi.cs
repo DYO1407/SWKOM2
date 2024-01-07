@@ -24,6 +24,10 @@ using BusinessLogic.Interfaces;
 using BusinessLogic;
 using System.Linq;
 using System.IO;
+using Microsoft.Extensions.Logging;
+
+using MinIOFileStorageService;
+using System.Threading.Tasks;
 
 namespace NPaperless.Services.Controllers
 { 
@@ -37,12 +41,14 @@ namespace NPaperless.Services.Controllers
         private readonly IMapper _mapper;
         private  readonly IDocumentManagementLogic _dlogic;
         private readonly IDocumentUploadLogic _uploadLogic;
+        private readonly IMinIOService _minIOService;
 
-        public DocumentsApiController(IMapper mapper, IDocumentManagementLogic dlogic, IDocumentUploadLogic uploadLogic)
+        public DocumentsApiController(IMapper mapper, IDocumentManagementLogic dlogic, IDocumentUploadLogic uploadLogic,IMinIOService minIOService)
         {
             _mapper = mapper;
             _dlogic = dlogic;
             _uploadLogic = uploadLogic;
+            _minIOService = minIOService;
         }
 
     
@@ -78,7 +84,7 @@ namespace NPaperless.Services.Controllers
         public virtual IActionResult DeleteDocument([FromRoute (Name = "id")][Required]int id)
         {
             _dlogic.DeleteDocument(id);
-
+            
             return Ok(true);
 
 
@@ -322,7 +328,7 @@ namespace NPaperless.Services.Controllers
         [Consumes("multipart/form-data")]
         [ValidateModelState]
         [SwaggerOperation("UploadDocument")]
-        public virtual IActionResult UploadDocument([FromForm (Name = "title")]string title, [FromForm (Name = "created")]DateTime? created, [FromForm (Name = "document_type")]int? documentType, [FromForm (Name = "tags")]List<int> tags, [FromForm (Name = "correspondent")]int? correspondent, [FromForm (Name = "document")]List<IFormFile> document)
+        public virtual async Task<IActionResult> UploadDocument([FromForm (Name = "title")]string title, [FromForm (Name = "created")]DateTime? created, [FromForm (Name = "document_type")]int? documentType, [FromForm (Name = "tags")]List<int> tags, [FromForm (Name = "correspondent")]int? correspondent, [FromForm (Name = "document")]List<IFormFile> document)
         {
 
 
@@ -350,7 +356,19 @@ namespace NPaperless.Services.Controllers
 
             };
 
-            var newDoc = _uploadLogic.UploadDocument(doc);    
+            var newDoc = _uploadLogic.UploadDocument(doc);
+
+            foreach(var file in document)
+            {
+                using (var fileStream = file.OpenReadStream())
+                {
+                    await _minIOService.UploadFileAsync(fileStream,file.ContentType,file.FileName);
+
+
+                }
+
+            }
+           
 
 
 

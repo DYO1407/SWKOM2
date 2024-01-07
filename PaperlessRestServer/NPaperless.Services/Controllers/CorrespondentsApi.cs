@@ -21,6 +21,7 @@ using NPaperless.Services.Attributes;
 using NPaperless.Services.DTOs;
 using AutoMapper;
 using BusinessLogic.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace NPaperless.Services.Controllers
 {
@@ -33,15 +34,14 @@ namespace NPaperless.Services.Controllers
 
         private readonly IMapper _mapper;
         private readonly ICorrespondentLogic _correspondentLogic;
+        private readonly ILogger<CorrespondentsApiController> _logger;
 
-        public CorrespondentsApiController(IMapper mapper, ICorrespondentLogic correspondentLogic)
+        public CorrespondentsApiController(IMapper mapper, ICorrespondentLogic correspondentLogic, ILogger<CorrespondentsApiController> logger)
         {
             _mapper = mapper;
             _correspondentLogic = correspondentLogic;
+            _logger = logger;
         }
-
-
-
 
         /// <summary>
         /// 
@@ -56,17 +56,17 @@ namespace NPaperless.Services.Controllers
         [SwaggerResponse(statusCode: 200, type: typeof(CreateCorrespondentRequest), description: "Success")]
         public virtual IActionResult CreateCorrespondent([FromBody] Correspondent createCorrespondentRequest)
         {
-
-
             var correspondentEntity = _mapper.Map<BusinessLogic.Entities.Correspondent>(createCorrespondentRequest);
-            _correspondentLogic.CreateCorrespondent(correspondentEntity);
-         
+            try
+            {
+                _correspondentLogic.CreateCorrespondent(correspondentEntity);
+                _logger.LogInformation($"Created new Correspondet {System.Text.Json.JsonSerializer.Serialize(correspondentEntity)}");
 
-
-           
-          
-           
-
+            }
+            catch(Exception ex)
+            {
+                
+            }
             // to check if mapping works  
             return Ok(correspondentEntity);
            
@@ -83,9 +83,8 @@ namespace NPaperless.Services.Controllers
         [SwaggerOperation("DeleteCorrespondent")]
         public virtual IActionResult DeleteCorrespondent([FromRoute(Name = "id")][Required] int id)
         {
-
             _correspondentLogic.DeleteCorrespondent(id);
-
+            _logger.LogInformation($"Correspondent with ID {id} deleted");
             return Ok();
         }
 
@@ -103,7 +102,7 @@ namespace NPaperless.Services.Controllers
         public virtual IActionResult GetCorrespondents([FromQuery(Name = "page")] int? page, [FromQuery(Name = "full_perms")] bool? fullPerms)
         {
             //var example = _correspondentLogic.GetCorrespondent(id);
-                _correspondentLogic.GetCorrespondent((int)page);
+            _correspondentLogic.GetCorrespondent((int)page);
             return Ok(); 
         }
 
@@ -124,7 +123,7 @@ namespace NPaperless.Services.Controllers
 
             var correspondentEntity = _mapper.Map<BusinessLogic.Entities.Correspondent>(updateCorrespondentRequest);
             var example = _correspondentLogic.UpdateCorrespondent(correspondentEntity);
-
+            _logger.LogInformation($"Correspondent updated to {System.Text.Json.JsonSerializer.Serialize(correspondentEntity)}");
 
             return new ObjectResult(example);
         }
