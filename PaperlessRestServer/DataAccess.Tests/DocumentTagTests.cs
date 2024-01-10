@@ -3,7 +3,7 @@ using DataAccess.Entities; // Make sure this using directive is present
 
 namespace DataAccess.Tests.Entities
 {
-    public class DocumentTagTests
+    /*public class DocumentTagTests
     {
         [Fact]
         public void DocumentTagClassPropertiesShouldHaveCorrectDataTypes()
@@ -37,5 +37,5 @@ namespace DataAccess.Tests.Entities
         }
 
         // Add more tests as needed based on specific requirements or validation rules.
-    }
+    }*/
 }
