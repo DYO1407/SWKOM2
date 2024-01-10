@@ -100,7 +100,7 @@ namespace DataAccess.Sql
                 return existingCorrespondent;
             }
             _logger.LogWarning($"No correspondent found to { JsonSerializer.Serialize(correspondent) } ");
-            throw new Exception(correspondent.Id.ToString());
+            throw new CorrespondentNotFoundException(correspondent.Id.ToString());
         }
     }
 }

@@ -17,6 +17,7 @@
     <ProjectReference Include="..\BusinessLogic.Entities\BusinessLogic.Entities.csproj" />
     <ProjectReference Include="..\BusinessLogic.Exceptions\BusinessLogic.Exceptions.csproj" />
     <ProjectReference Include="..\BusinessLogic.Interfaces\BusinessLogic.Interfaces.csproj" />
+    <ProjectReference Include="..\DataAccess.Exceptions\DataAccess.Exceptions.csproj" />
     <ProjectReference Include="..\DataAccess.Interfaces\DataAccess.Interfaces.csproj" />
   </ItemGroup>
 

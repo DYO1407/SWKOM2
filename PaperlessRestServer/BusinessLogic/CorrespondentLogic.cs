@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using System.Text.Json;
 using BusinessLogic.Exceptions;
 
+
 namespace BusinessLogic
 {
     public class CorrespondentLogic : ICorrespondentLogic
@@ -36,9 +37,10 @@ namespace BusinessLogic
                 _correspondentRepository.AddCorrespondent(newDALCorrespondent);
                 _logger.LogInformation($"New Correspondent { JsonSerializer.Serialize(newDALCorrespondent) } created");
             }
-            catch(Exception ex)
+            catch(DataAccess.Exceptions.DatabaseException ex)
             {
-                _logger.LogError($"Correspondent creation for {JsonSerializer.Serialize(newDALCorrespondent)} failed");
+                _logger.LogError($"Correspondent creation for {JsonSerializer.Serialize(newDALCorrespondent)} failed in Database", ex);
+                throw new DataAccessException("An error occurred while creating the correspondent",ex);
             }
             return newBLCorrespondent;
         }
@@ -51,10 +53,14 @@ namespace BusinessLogic
                 _logger.LogInformation($"Correspondent with ID: {id} successfully deleted");
                 return true;
             }
-            catch(Exception ex)
+            catch(DataAccess.Exceptions.CorrespondentNotFoundException ex)
             {
-                _logger.LogError($"Correspondent with ID: {id} could not be deleted");
-                return false;
+                _logger.LogError($"Correspondent with ID: {id} does not exist and could not be deleted");
+                throw new CorrespondentNotFoundException($"Correspondent with ID: {id} does not exist and could not be deleted", ex);
+            }
+            catch(DataAccess.Exceptions.DatabaseException ex)
+            {
+                throw new DataAccessException($"Correspondent with ID: {id} could not be deleted", ex);
             }
         }
 
@@ -66,9 +72,10 @@ namespace BusinessLogic
                 correspondent = _mapper.Map<BusinessLogic.Entities.Correspondent>(_correspondentRepository.GetCorrespondent(page));
                 _logger.LogInformation($"Correspondent { JsonSerializer.Serialize(correspondent) } found");
             }
-            catch (Exception ex)
+            catch (DataAccess.Exceptions.CorrespondentNotFoundException ex)
             {
-                _logger.LogError($"No Correspondents found for ID: {page} found");
+                _logger.LogError($"No Correspondents found for ID: {page}");
+                throw new CorrespondentNotFoundException($"No Correspondents found for ID: {page}", ex);
             }
             return correspondent;   
         }
@@ -80,16 +87,14 @@ namespace BusinessLogic
                 ValidateCorrespondent(correspondent);
                 var updatedCorrespondent = _mapper.Map<BusinessLogic.Entities.Correspondent>(_correspondentRepository.UpdateCorrespondent(_mapper.Map<DataAccess.Entities.Correspondent>(correspondent)));
                 _logger.LogInformation($"Correspondent { JsonSerializer.Serialize(updatedCorrespondent) } successfully updated");
+                return correspondent;
+
             }
-            catch (ValidationException ex)
-            {
-                _logger.LogError($"Correspondent validation for { JsonSerializer.Serialize(correspondent) } failed");
-            }
-            catch(Exception ex)
+            catch (DataAccess.Exceptions.DatabaseException ex)
             {
                 _logger.LogError($"Correspondent { JsonSerializer.Serialize(correspondent) } could not be updated");
+                throw new DataAccessException($"Update correspondent {JsonSerializer.Serialize(correspondent)} failed",ex);
             }
-            return correspondent;
         }
 
         private void ValidateCorrespondent(Correspondent correspondent)
@@ -97,6 +102,7 @@ namespace BusinessLogic
             var validationResult = _validator.Validate(correspondent);
             if (!validationResult.IsValid)
             {
+                _logger.LogError($"validation for correspondent {JsonSerializer.Serialize(correspondent)} failed");
                 throw new ValidationException(validationResult.Errors);
             }
         }

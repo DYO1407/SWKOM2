@@ -15,7 +15,8 @@ using FluentValidation;
 using Microsoft.Extensions.Logging;
 using AutoMapper;
 using System.Text.Json;
-
+using DataAccess.Exceptions;
+using BusinessLogic.Exceptions;
 
 namespace BusinessLogic
 {
@@ -42,10 +43,15 @@ namespace BusinessLogic
                 _docRepository.DeleteDocument(id);
                 _logger.LogInformation($"Document with ID: {id} successfully deleted");
             }
-            catch (Exception ex)
+            catch(DatabaseException ex)
             {
                 _logger.LogError($"Document with ID: {id} could not be deleted");
-                
+                throw new DataAccessException("Error occured while deleting document", ex);
+            }
+            catch(DataAccess.Exceptions.DocumentNotFoundException ex)
+            {
+                _logger.LogWarning($"Document with ID: {id} does not exist", ex);
+                throw new BusinessLogic.Exceptions.DocumentNotFoundException();
             }
             return true;
         }
@@ -58,9 +64,15 @@ namespace BusinessLogic
                 document = _mapper.Map<BusinessLogic.Entities.Document>(_docRepository.GetDocument(id));
                 _logger.LogInformation($"Found Document { JsonSerializer.Serialize(document) }");
             }
-            catch (Exception ex)
+            catch (DataAccess.Exceptions.DocumentNotFoundException ex)
             {
-                _logger.LogError($"No Document with ID {id} found");
+                _logger.LogWarning($"No Document with ID {id} found");
+                throw new BusinessLogic.Exceptions.DocumentNotFoundException();
+            }
+            catch(DatabaseException ex)
+            {
+                _logger.LogError($"Document with ID {id} could not be fetched");
+                throw new DataAccessException("Fetch document failed", ex);
             }
             return document;
         }
@@ -75,13 +87,10 @@ namespace BusinessLogic
                 document = _mapper.Map<BusinessLogic.Entities.Document>(DADoc);
                 _logger.LogInformation($"Document updated: {document}");
             }
-            catch(ValidationException ex)
-            {
-                _logger.LogError("Validation failed");
-            }
-            catch(Exception ex)
+            catch(DataAccess.Exceptions.DocumentNotFoundException ex)
             {
                 _logger.LogError($"Document {JsonSerializer.Serialize(doc) } could not be updated");
+                throw new BusinessLogic.Exceptions.DocumentNotFoundException("Document could not be found", ex);
             }
             return doc;
         }
