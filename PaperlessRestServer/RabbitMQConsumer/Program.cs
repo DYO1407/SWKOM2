@@ -42,11 +42,11 @@ consumer.Received += (model, eventArgs) =>
     var body = eventArgs.Body.ToArray();
     var message = JsonConvert.DeserializeObject<Document>(Encoding.UTF8.GetString(body));
 
-    Console.WriteLine("hallo1");
+    Console.WriteLine("new Message:");
     //var file = GetFileFromMinio(message.Title + message.DocumentType);
-    GetFileFromMinio(message.Title + ".pdf");
+    GetFileFromMinio(message.Title + ".pdf").Wait();
 
-    ProcessImage(message.Title + ".pdf");
+    ProcessImage(message.Title + ".pdf"); 
     var result = handleMessage(message.Title);
 
     UpdateDatabaseAsync(result, message.Id );
@@ -62,6 +62,7 @@ string handleMessage(string title)
     Page page = engine.Process(Pix.LoadFromMemory(File.ReadAllBytes(title.Replace("\"", "") + ".jpg")), PageSegMode.Auto);
     //Page page = engine.Process(Pix.LoadFromMemory(file), PageSegMode.Auto);
     string result = page.GetText();
+    Console.WriteLine(page.GetText());
     return result;
 }
 
