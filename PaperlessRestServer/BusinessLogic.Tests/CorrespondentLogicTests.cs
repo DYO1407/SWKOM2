@@ -5,6 +5,7 @@ using BusinessLogic.Interfaces;
 using DataAccess.Interfaces;
 using AutoMapper;
 using Moq;
+using Microsoft.Extensions.Logging;
 
 namespace BusinessLogic.Tests
 {
@@ -16,21 +17,25 @@ namespace BusinessLogic.Tests
         //rest noch testen
         public class CorrespondentServiceTests
         {
-           
-
+            Mock<ILogger<CorrespondentLogic>> _mockLogger;
+            Mock<ICorrespondentRepository> _mockRepo;
+            Mock<IMapper> _mockMapper;
+            public CorrespondentServiceTests()
+            {
+                _mockRepo = new Mock<ICorrespondentRepository>();
+                _mockMapper = new Mock<IMapper>();
+                _mockLogger = new Mock<ILogger<CorrespondentLogic>>();
+            }
            
             [Fact]
             public void CreateCorrespondent_WithValidData_ReturnsCorrespondent()
             {
                 // Arrange
-                var mockRepo = new Mock<ICorrespondentRepository>();
-                var mockMapper = new Mock<IMapper>();
-
-                mockRepo.Setup(repo =>repo.AddCorrespondent(It.IsAny<DataAccess.Entities.Correspondent>()));
-                mockMapper.Setup(mapper => mapper.Map<DataAccess.Entities.Correspondent>(It.IsAny<Correspondent>()))
+                _mockRepo.Setup(repo => repo.AddCorrespondent(It.IsAny<DataAccess.Entities.Correspondent>()));
+                _mockMapper.Setup(mapper => mapper.Map<DataAccess.Entities.Correspondent>(It.IsAny<Correspondent>()))
                 .Returns(new DataAccess.Entities.Correspondent());
 
-                var CL = new CorrespondentLogic(mockRepo.Object,mockMapper.Object);
+                var CL = new CorrespondentLogic(_mockRepo.Object,_mockMapper.Object, _mockLogger.Object);
                 var validCorrespondent = new Correspondent
                 {
                     Id = 1,
@@ -56,16 +61,14 @@ namespace BusinessLogic.Tests
             [Fact]
             public void CreateCorrespondent_WithInvalidData_ThrowsValidationException()
             {
-                // Arrange
-                var mockRepo = new Mock<ICorrespondentRepository>();
-                var mockMapper = new Mock<IMapper>();
+                //Arrange
 
-                mockRepo.Setup(repo => repo.AddCorrespondent(It.IsAny<DataAccess.Entities.Correspondent>()));
-                mockMapper.Setup(mapper => mapper.Map<DataAccess.Entities.Correspondent>(It.IsAny<Correspondent>()))
+                _mockRepo.Setup(repo => repo.AddCorrespondent(It.IsAny<DataAccess.Entities.Correspondent>()));
+                _mockMapper.Setup(mapper => mapper.Map<DataAccess.Entities.Correspondent>(It.IsAny<Correspondent>()))
                 .Returns(new DataAccess.Entities.Correspondent());
 
 
-                var CL = new CorrespondentLogic(mockRepo.Object, mockMapper.Object);
+                var CL = new CorrespondentLogic(_mockRepo.Object, _mockMapper.Object, _mockLogger.Object);
                 var invalidCorrespondent = new Correspondent
                 {
                     Id = 1,
@@ -85,15 +88,12 @@ namespace BusinessLogic.Tests
             [Fact]
             public void UpdateCorrespondent_WithValidData_ReturnsCorrespondent()
             {
-                // Arrange
-                var mockRepo = new Mock<ICorrespondentRepository>();
-                var mockMapper = new Mock<IMapper>();
-                
-                mockRepo.Setup(repo => repo.AddCorrespondent(It.IsAny<DataAccess.Entities.Correspondent>()));
-                mockMapper.Setup(mapper => mapper.Map<DataAccess.Entities.Correspondent>(It.IsAny<Correspondent>()))
+                // Arrange               
+                _mockRepo.Setup(repo => repo.AddCorrespondent(It.IsAny<DataAccess.Entities.Correspondent>()));
+                _mockMapper.Setup(mapper => mapper.Map<DataAccess.Entities.Correspondent>(It.IsAny<Correspondent>()))
                 .Returns(new DataAccess.Entities.Correspondent());
 
-                var CL = new CorrespondentLogic(mockRepo.Object, mockMapper.Object);
+                var CL = new CorrespondentLogic(_mockRepo.Object, _mockMapper.Object, _mockLogger.Object);
                 var validCorrespondent = new Correspondent
                 {
                     Id = 1,
@@ -119,10 +119,7 @@ namespace BusinessLogic.Tests
             public void DeleteCorrespondent_WithValidId_ReturnsTrue()
             {
                 // Arrange
-                var mockRepo = new Mock<ICorrespondentRepository>();
-                var mockMapper = new Mock<IMapper>();
-
-                var CL = new CorrespondentLogic(mockRepo.Object, mockMapper.Object);
+                var CL = new CorrespondentLogic(_mockRepo.Object, _mockMapper.Object, _mockLogger.Object);
                 var validId = 1;
 
                 // Act
@@ -136,10 +133,7 @@ namespace BusinessLogic.Tests
             public void CreateCorrespondent_WithValidData_CallsRepositoryAddMethod()
             {
                 // Arrange
-                var mockRepo = new Mock<ICorrespondentRepository>();
-                var mockMapper = new Mock<IMapper>();
-
-                var CL = new CorrespondentLogic(mockRepo.Object, mockMapper.Object);
+                var CL = new CorrespondentLogic(_mockRepo.Object, _mockMapper.Object, _mockLogger.Object);
                 var validCorrespondent = new Correspondent
                 {
                     Id = 1,
@@ -156,7 +150,7 @@ namespace BusinessLogic.Tests
                 CL.CreateCorrespondent(validCorrespondent);
 
                 // Assert
-                mockRepo.Verify(repo => repo.AddCorrespondent(It.IsAny<DataAccess.Entities.Correspondent>()), Times.Once);
+                _mockRepo.Verify(repo => repo.AddCorrespondent(It.IsAny<DataAccess.Entities.Correspondent>()), Times.Once);
             }
 
             [Fact]
@@ -166,7 +160,7 @@ namespace BusinessLogic.Tests
                 var mockRepo = new Mock<ICorrespondentRepository>();
                 var mockMapper = new Mock<IMapper>();
 
-                var CL = new CorrespondentLogic(mockRepo.Object, mockMapper.Object);
+                var CL = new CorrespondentLogic(_mockRepo.Object, _mockMapper.Object, _mockLogger.Object);
                 var invalidCorrespondent = new Correspondent
                 {
                     Id = 1,
@@ -187,13 +181,10 @@ namespace BusinessLogic.Tests
             public void GetCorrespondent_WithInvalidPage_ReturnsNull()
             {
                 // Arrange
-                var mockRepo = new Mock<ICorrespondentRepository>();
-                var mockMapper = new Mock<IMapper>();
-
-                mockRepo.Setup(repo => repo.GetCorrespondent(It.IsAny<int>()))
+                _mockRepo.Setup(repo => repo.GetCorrespondent(It.IsAny<int>()))
                     .Returns((DataAccess.Entities.Correspondent)null); // Simulate a null result from the repository
 
-                var CL = new CorrespondentLogic(mockRepo.Object, mockMapper.Object);
+                var CL = new CorrespondentLogic(_mockRepo.Object, _mockMapper.Object, _mockLogger.Object);
                 var invalidPage = -1; // Invalid page
 
                 // Act
@@ -207,10 +198,7 @@ namespace BusinessLogic.Tests
             public void DeleteCorrespondent_WithInnvalidId_ReturnsTrue()
             {
                 // Arrange
-                var mockRepo = new Mock<ICorrespondentRepository>();
-                var mockMapper = new Mock<IMapper>();
-
-                var CL = new CorrespondentLogic(mockRepo.Object, mockMapper.Object);
+                var CL = new CorrespondentLogic(_mockRepo.Object, _mockMapper.Object, _mockLogger.Object);
                 var invalidId = -1; // Invalid id
 
                 // Act
@@ -227,12 +215,10 @@ namespace BusinessLogic.Tests
             public void UpdateCorrespondent_WithVaalidData_CallsRepositoryUpdateMethod()
             {
                 // Arrange
-                var mockRepo = new Mock<ICorrespondentRepository>();
-                var mockMapper = new Mock<IMapper>();
+                
+                _mockRepo.Setup(repo => repo.UpdateCorrespondent(It.IsAny<DataAccess.Entities.Correspondent>()));
 
-                mockRepo.Setup(repo => repo.UpdateCorrespondent(It.IsAny<DataAccess.Entities.Correspondent>()));
-
-                var CL = new CorrespondentLogic(mockRepo.Object, mockMapper.Object);
+                var CL = new CorrespondentLogic(_mockRepo.Object, _mockMapper.Object, _mockLogger.Object);
                 var validCorrespondent = new Correspondent
                 {
                     Id = 1,
@@ -249,16 +235,13 @@ namespace BusinessLogic.Tests
                 CL.UpdateCorrespondent(validCorrespondent);
 
                 // Assert
-                mockRepo.Verify(repo => repo.UpdateCorrespondent(It.IsAny<DataAccess.Entities.Correspondent>()), Times.Once);
+                _mockRepo.Verify(repo => repo.UpdateCorrespondent(It.IsAny<DataAccess.Entities.Correspondent>()), Times.Once);
             }
             [Fact]
             public void CreateCorrespondent_WithNullCorrespondent_ThrowsArgumentNullException()
             {
                 // Arrange
-                var mockRepo = new Mock<ICorrespondentRepository>();
-                var mockMapper = new Mock<IMapper>();
-
-                var CL = new CorrespondentLogic(mockRepo.Object, mockMapper.Object);
+                var CL = new CorrespondentLogic(_mockRepo.Object, _mockMapper.Object, _mockLogger.Object);
 
                 // Act & Assert
                 Assert.Throws<ArgumentNullException>(() => CL.CreateCorrespondent(null));
@@ -268,14 +251,11 @@ namespace BusinessLogic.Tests
             public void CreateCorrespondent_WithValidData_CallsMapperMapMethod()
             {
                 // Arrange
-                var mockRepo = new Mock<ICorrespondentRepository>();
-                var mockMapper = new Mock<IMapper>();
-
-                mockRepo.Setup(repo => repo.AddCorrespondent(It.IsAny<DataAccess.Entities.Correspondent>()));
-                mockMapper.Setup(mapper => mapper.Map<DataAccess.Entities.Correspondent>(It.IsAny<Correspondent>()))
+                _mockRepo.Setup(repo => repo.AddCorrespondent(It.IsAny<DataAccess.Entities.Correspondent>()));
+                _mockMapper.Setup(mapper => mapper.Map<DataAccess.Entities.Correspondent>(It.IsAny<Correspondent>()))
                     .Returns(new DataAccess.Entities.Correspondent());
 
-                var CL = new CorrespondentLogic(mockRepo.Object, mockMapper.Object);
+                var CL = new CorrespondentLogic(_mockRepo.Object, _mockMapper.Object, _mockLogger.Object);
                 var validCorrespondent = new Correspondent
                 {
                     Id = 1,
@@ -292,7 +272,7 @@ namespace BusinessLogic.Tests
                 CL.CreateCorrespondent(validCorrespondent);
 
                 // Assert
-                mockMapper.Verify(mapper => mapper.Map<DataAccess.Entities.Correspondent>(It.IsAny<Correspondent>()), Times.Once);
+                _mockMapper.Verify(mapper => mapper.Map<DataAccess.Entities.Correspondent>(It.IsAny<Correspondent>()), Times.Once);
             }
 
            
@@ -302,10 +282,7 @@ namespace BusinessLogic.Tests
             public void UpdateCorrespondent_WithNullCorrespondent_ThrowsArgumentNullException()
             {
                 // Arrange
-                var mockRepo = new Mock<ICorrespondentRepository>();
-                var mockMapper = new Mock<IMapper>();
-
-                var CL = new CorrespondentLogic(mockRepo.Object, mockMapper.Object);
+                var CL = new CorrespondentLogic(_mockRepo.Object, _mockMapper.Object, _mockLogger.Object);
 
                 // Act & Assert
                 Assert.Throws<ArgumentNullException>(() => CL.UpdateCorrespondent(null));
@@ -315,14 +292,11 @@ namespace BusinessLogic.Tests
             public void UpdateCorrespondent_WithValidData_CallsMapperMapMethod()
             {
                 // Arrange
-                var mockRepo = new Mock<ICorrespondentRepository>();
-                var mockMapper = new Mock<IMapper>();
-
-                mockRepo.Setup(repo => repo.UpdateCorrespondent(It.IsAny<DataAccess.Entities.Correspondent>()));
-                mockMapper.Setup(mapper => mapper.Map<DataAccess.Entities.Correspondent>(It.IsAny<Correspondent>()))
+                _mockRepo.Setup(repo => repo.UpdateCorrespondent(It.IsAny<DataAccess.Entities.Correspondent>()));
+                _mockMapper.Setup(mapper => mapper.Map<DataAccess.Entities.Correspondent>(It.IsAny<Correspondent>()))
                     .Returns(new DataAccess.Entities.Correspondent());
 
-                var CL = new CorrespondentLogic(mockRepo.Object, mockMapper.Object);
+                var CL = new CorrespondentLogic(_mockRepo.Object, _mockMapper.Object, _mockLogger.Object);
                 var validCorrespondent = new Correspondent
                 {
                     Id = 1,
@@ -339,21 +313,18 @@ namespace BusinessLogic.Tests
                 CL.UpdateCorrespondent(validCorrespondent);
 
                 // Assert
-                mockMapper.Verify(mapper => mapper.Map<DataAccess.Entities.Correspondent>(It.IsAny<Correspondent>()), Times.Once);
+                _mockMapper.Verify(mapper => mapper.Map<DataAccess.Entities.Correspondent>(It.IsAny<Correspondent>()), Times.Once);
             }
 
             [Fact]
             public void UpdateCorrespondent_WithValidData_CallsRepositoryUpdateMethod()
             {
-                // Arrange
-                var mockRepo = new Mock<ICorrespondentRepository>();
-                var mockMapper = new Mock<IMapper>();
-
-                mockRepo.Setup(repo => repo.UpdateCorrespondent(It.IsAny<DataAccess.Entities.Correspondent>()));
-                mockMapper.Setup(mapper => mapper.Map<DataAccess.Entities.Correspondent>(It.IsAny<Correspondent>()))
+                // Arrange   
+                _mockRepo.Setup(repo => repo.UpdateCorrespondent(It.IsAny<DataAccess.Entities.Correspondent>()));
+                _mockMapper.Setup(mapper => mapper.Map<DataAccess.Entities.Correspondent>(It.IsAny<Correspondent>()))
                     .Returns(new DataAccess.Entities.Correspondent());
 
-                var CL = new CorrespondentLogic(mockRepo.Object, mockMapper.Object);
+                var CL = new CorrespondentLogic(_mockRepo.Object, _mockMapper.Object, _mockLogger.Object);
                 var validCorrespondent = new Correspondent
                 {
                     Id = 1,
@@ -370,18 +341,15 @@ namespace BusinessLogic.Tests
                 CL.UpdateCorrespondent(validCorrespondent);
 
                 // Assert
-                mockRepo.Verify(repo => repo.UpdateCorrespondent(It.IsAny<DataAccess.Entities.Correspondent>()), Times.Once);
+                _mockRepo.Verify(repo => repo.UpdateCorrespondent(It.IsAny<DataAccess.Entities.Correspondent>()), Times.Once);
             }
 
         
             [Fact]
             public void DeleteCorrespondent_WithInvalidId_ReturnsTrue()
             {
-                // Arrange
-                var mockRepo = new Mock<ICorrespondentRepository>();
-                var mockMapper = new Mock<IMapper>();
-
-                var CL = new CorrespondentLogic(mockRepo.Object, mockMapper.Object);
+                // Arrange 
+                var CL = new CorrespondentLogic(_mockRepo.Object, _mockMapper.Object, _mockLogger.Object);
                 var invalidId = -1; // Invalid id
 
                 // Act

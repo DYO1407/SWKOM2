@@ -6,6 +6,7 @@ using DataAccess.Interfaces;
 using FluentValidation;
 using Moq;
 using Xunit;
+using Microsoft.Extensions.Logging;
 
 namespace BusinessLogic.Tests
 {
@@ -14,12 +15,14 @@ namespace BusinessLogic.Tests
         private readonly Mock<IDManagementRepository> _mockDocRepository;
         private readonly Mock<IMapper> _mockMapper;
         private readonly DocumentManagementLogic _documentManagementLogic;
+        private readonly Mock<ILogger<DocumentManagementLogic>> _mockLogger;   
 
         public DocumentManagementLogicTests()
         {
             _mockDocRepository = new Mock<IDManagementRepository>();
             _mockMapper = new Mock<IMapper>();
-            _documentManagementLogic = new DocumentManagementLogic(_mockDocRepository.Object, _mockMapper.Object);
+            _mockLogger = new Mock<ILogger<DocumentManagementLogic>>();
+            _documentManagementLogic = new DocumentManagementLogic(_mockDocRepository.Object, _mockMapper.Object, _mockLogger.Object);
         }
 
         [Fact]

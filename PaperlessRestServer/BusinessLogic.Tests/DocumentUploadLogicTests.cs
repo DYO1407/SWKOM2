@@ -5,6 +5,8 @@ using BusinessLogic.Interfaces;
 using DataAccess.Interfaces;
 using AutoMapper;
 using Moq;
+using Castle.Core.Logging;
+using Microsoft.Extensions.Logging;
 
 namespace BusinessLogic.Tests
 {
@@ -17,8 +19,9 @@ namespace BusinessLogic.Tests
                 var mockMessageLogic = new Mock<IMessageLogic>();
                 var mockDManagementRepository = new Mock<IDManagementRepository>();
                 var mockMapper = new Mock<IMapper>();
+                var mockLogger = new Mock<ILogger<DocumentUploadLogic>>();
 
-                var logic = new DocumentUploadLogic(mockMessageLogic.Object, mockDManagementRepository.Object, mockMapper.Object);
+                var logic = new DocumentUploadLogic(mockMessageLogic.Object, mockDManagementRepository.Object, mockMapper.Object, mockLogger.Object);
                 var validDocument = new Document
                 {
                     Title = "Test Document",
