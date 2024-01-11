@@ -33,6 +33,10 @@ using BusinessLogic.Interfaces;
 using BusinessLogic;
 using DataAccess.Interfaces;
 using MinIOFileStorageService;
+using ElasticSearchService;
+
+
+
 
 namespace NPaperless.Services
 {
@@ -61,6 +65,8 @@ namespace NPaperless.Services
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddSingleton<IElasticSearch, ElasticSearch>();
 
             services.AddDbContext<AppDbContext>(options =>
             options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));

@@ -25,9 +25,11 @@ using BusinessLogic;
 using System.Linq;
 using System.IO;
 using Microsoft.Extensions.Logging;
+using ElasticSearchService;
 
 using MinIOFileStorageService;
 using System.Threading.Tasks;
+using Document = NPaperless.Services.DTOs.Document;
 
 namespace NPaperless.Services.Controllers
 { 
@@ -42,13 +44,15 @@ namespace NPaperless.Services.Controllers
         private  readonly IDocumentManagementLogic _dlogic;
         private readonly IDocumentUploadLogic _uploadLogic;
         private readonly IMinIOService _minIOService;
+        private readonly IElasticSearch _elasticSearch;
 
-        public DocumentsApiController(IMapper mapper, IDocumentManagementLogic dlogic, IDocumentUploadLogic uploadLogic,IMinIOService minIOService)
+        public DocumentsApiController(IMapper mapper, IDocumentManagementLogic dlogic, IDocumentUploadLogic uploadLogic,IMinIOService minIOService,IElasticSearch elasticSearch)
         {
             _mapper = mapper;
             _dlogic = dlogic;
             _uploadLogic = uploadLogic;
             _minIOService = minIOService;
+            _elasticSearch = elasticSearch;
         }
 
     
@@ -118,22 +122,22 @@ namespace NPaperless.Services.Controllers
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="page"></param>
-        /// <param name="fullPerms"></param>
+        /// <param name="searchTerm"></param>
+
         /// <response code="200">Success</response>
         [HttpGet]
-        [Route("/api/documents/{id}")]
+        [Route("/api/documents/{searchTerm}")]
         [ValidateModelState]
         [SwaggerOperation("GetDocument")]
         [SwaggerResponse(statusCode: 200, type: typeof(GetDocument200Response), description: "Success")]
-        public virtual IActionResult GetDocument([FromRoute (Name = "id")][Required]int id)
-        {   
-                var doc= _dlogic.GetDocument(id);
-            
+        public virtual IActionResult SearchDocument([FromRoute (Name = "searchTerm")][Required] string searchTerm)
+        {
+            //  var doc= _dlogic.GetDocument(id);
+
+            var result = _elasticSearch.SearchDocumentAsync(searchTerm);
 
 
-            return Ok(doc);
+            return Ok(result);
         }
 
         /// <summary>
@@ -374,5 +378,9 @@ namespace NPaperless.Services.Controllers
 
             return Ok(newDoc);
         }
+
+
+    
+
     }
 }

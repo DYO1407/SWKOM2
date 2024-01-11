@@ -16,7 +16,30 @@ using System.Security.Cryptography;
 using System.Reflection.Metadata;
 using Newtonsoft.Json;
 using System.Net;
+using System.Runtime.CompilerServices;
+using NPaperless.Services;
+using ElasticSearchService;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Elastic.Clients.Elasticsearch.Core.Reindex;
 
+var builder = new ConfigurationBuilder()
+    .SetBasePath("C:\\Users\\deyaa\\source\\repos\\SWKOM2\\PaperlessRestServer\\NPaperless.Services")
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddEnvironmentVariables();
+
+IConfiguration configuration = builder.Build();
+
+
+
+ILoggerFactory loggerFactory = LoggerFactory.Create(builder =>
+{
+    builder.AddConsole();
+    // Setzen Sie das Log-Level basierend auf Ihrer Konfiguration
+    builder.SetMinimumLevel(LogLevel.Warning);
+});
+
+ILogger<ElasticSearch> logger = loggerFactory.CreateLogger<ElasticSearch>();
 
 
 var factory = new ConnectionFactory()
@@ -26,6 +49,7 @@ var factory = new ConnectionFactory()
     Password = "guest",
     VirtualHost = "/"
 };
+
 
 var connection = factory.CreateConnection();
 
@@ -37,8 +61,10 @@ Console.WriteLine(" [*] Waiting for messages.");
 
 var consumer = new EventingBasicConsumer(channel);
 
-consumer.Received += (model, eventArgs) =>
-{
+
+consumer.Received += async (model, eventArgs) =>
+{   
+    
     var body = eventArgs.Body.ToArray();
     var message = JsonConvert.DeserializeObject<Document>(Encoding.UTF8.GetString(body));
 
@@ -46,10 +72,24 @@ consumer.Received += (model, eventArgs) =>
     //var file = GetFileFromMinio(message.Title + message.DocumentType);
     GetFileFromMinio(message.Title + ".pdf").Wait();
 
-    ProcessImage(message.Title + ".pdf"); 
+    ProcessImage(message.Title + ".pdf");
     var result = handleMessage(message.Title);
 
-    UpdateDatabaseAsync(result, message.Id );
+    var result_id = UpdateDatabaseAsync(result, message.Id);
+
+    ElasticSearchService.Document doc = new ElasticSearchService.Document
+    { Id = message.Id,
+      Content = result,
+      Title = message.Title
+        
+    };
+
+    var elasticSearchService = new ElasticSearch(configuration, logger);
+    elasticSearchService.AddDocumentAsync(doc);
+
+
+
+
 };
 
 channel.BasicConsume("uploadDocument", true, consumer);
@@ -107,7 +147,7 @@ async Task GetFileFromMinio(string fileName)
     }
 }
 
-async void UpdateDatabaseAsync(string result, int id)
+async Task<int> UpdateDatabaseAsync(string result, int id)
 {
     var connectionString = "Host=host.docker.internal;Database=mydatabase;Username=myuser;Password=newpassword";
     await using var dataSource = NpgsqlDataSource.Create(connectionString);
@@ -118,6 +158,8 @@ async void UpdateDatabaseAsync(string result, int id)
         cmd.Parameters.AddWithValue(id);
         await cmd.ExecuteNonQueryAsync();
     }
+
+    return id;
 }
 
 public class Document

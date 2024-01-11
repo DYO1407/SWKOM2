@@ -45,4 +45,9 @@
     <None Remove="C:\Users\deyaa\.nuget\packages\tesseract\5.2.0\build\\..\x64\tesseract50.dll" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ElasticSearchService\ElasticSearchService.csproj" />
+    <ProjectReference Include="..\NPaperless.Services\PaperlessRestServer.csproj" />
+  </ItemGroup>
+
 </Project>
