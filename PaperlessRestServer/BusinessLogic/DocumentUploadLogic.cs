@@ -10,6 +10,8 @@ using DataAccess.Interfaces;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
+using DataAccess.Exceptions;
+using BusinessLogic.Exceptions;
 
 namespace BusinessLogic
 {
@@ -44,14 +46,21 @@ namespace BusinessLogic
                 document = _mapper.Map<BusinessLogic.Entities.Document>(_dManagementRepository.AddDocument(newDALDoc));
                 _messageLogic.SendingMessage<Document>(document);
                 _logger.LogInformation($"New Document { JsonSerializer.Serialize(document) }");
+                return document;
             }
-            catch ( Exception ex )
+            catch (DatabaseException ex )
             {
-                _logger.LogError($"Uploading Document { JsonSerializer.Serialize(doc) }");
+                _logger.LogError($"Uploading Document { JsonSerializer.Serialize(doc)} failed");
+                throw new DataAccessException("A database error occured while updating the document",ex);
+            }
+            catch(DataAccess.Exceptions.DocumentNotFoundException ex)
+            {
+                _logger.LogWarning($"Document {JsonSerializer.Serialize(doc)} not found in database");
+                throw new BusinessLogic.Exceptions.DocumentNotFoundException("Document could not be updated because it doesnt exist",ex);
             }
             
             //return _documentRepository.UploadDocumentAsync(document);
-            return document;
+          
         }
 
         //Task<Document> UploadDocumentAsync(string title, DateTime? created, int? documentTypeId, List<int> tagIds, int? correspondentId, Stream documentStream)

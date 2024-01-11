@@ -22,6 +22,7 @@ using NPaperless.Services.DTOs;
 using AutoMapper;
 using BusinessLogic.Interfaces;
 using Microsoft.Extensions.Logging;
+using BusinessLogic.Exceptions;
 
 namespace NPaperless.Services.Controllers
 {
@@ -61,15 +62,13 @@ namespace NPaperless.Services.Controllers
             {
                 _correspondentLogic.CreateCorrespondent(correspondentEntity);
                 _logger.LogInformation($"Created new Correspondet {System.Text.Json.JsonSerializer.Serialize(correspondentEntity)}");
-
+                return Ok(correspondentEntity);
             }
             catch(Exception ex)
             {
-                
+                return BadRequest("An error occurred");
             }
-            // to check if mapping works  
-            return Ok(correspondentEntity);
-           
+            // to check if mapping works                        
         }
 
         /// <summary>
@@ -83,9 +82,17 @@ namespace NPaperless.Services.Controllers
         [SwaggerOperation("DeleteCorrespondent")]
         public virtual IActionResult DeleteCorrespondent([FromRoute(Name = "id")][Required] int id)
         {
-            _correspondentLogic.DeleteCorrespondent(id);
-            _logger.LogInformation($"Correspondent with ID {id} deleted");
-            return Ok();
+            try
+            {
+                _correspondentLogic.DeleteCorrespondent(id);
+                _logger.LogInformation($"Correspondent with ID {id} deleted");
+                return Ok();
+            }
+            catch(Exception ex)
+            {
+                return BadRequest("An error occured");
+            }
+            
         }
 
         /// <summary>
@@ -102,8 +109,16 @@ namespace NPaperless.Services.Controllers
         public virtual IActionResult GetCorrespondents([FromQuery(Name = "page")] int? page, [FromQuery(Name = "full_perms")] bool? fullPerms)
         {
             //var example = _correspondentLogic.GetCorrespondent(id);
-            _correspondentLogic.GetCorrespondent((int)page);
-            return Ok(); 
+            try
+            {
+                _correspondentLogic.GetCorrespondent((int)page);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("An error occurred");
+            }
+           
         }
 
         /// <summary>
@@ -120,12 +135,19 @@ namespace NPaperless.Services.Controllers
         [SwaggerResponse(statusCode: 200, type: typeof(UpdateCorrespondent200Response), description: "Success")]
         public virtual IActionResult UpdateCorrespondent([FromRoute(Name = "id")][Required] int id, [FromBody] Correspondent updateCorrespondentRequest)
         {
+            try
+            {
+                var correspondentEntity = _mapper.Map<BusinessLogic.Entities.Correspondent>(updateCorrespondentRequest);
+                var example = _correspondentLogic.UpdateCorrespondent(correspondentEntity);
+                _logger.LogInformation($"Correspondent updated to {System.Text.Json.JsonSerializer.Serialize(correspondentEntity)}");
 
-            var correspondentEntity = _mapper.Map<BusinessLogic.Entities.Correspondent>(updateCorrespondentRequest);
-            var example = _correspondentLogic.UpdateCorrespondent(correspondentEntity);
-            _logger.LogInformation($"Correspondent updated to {System.Text.Json.JsonSerializer.Serialize(correspondentEntity)}");
-
-            return new ObjectResult(example);
+                return new ObjectResult(example);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest("An error occured");
+            }
+            
         }
     }
 }

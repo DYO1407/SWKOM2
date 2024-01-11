@@ -7,6 +7,7 @@ using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
+using Microsoft.Extensions.Logging;
 
 namespace BusinessLogic.Tests
 {
@@ -16,6 +17,7 @@ namespace BusinessLogic.Tests
         private readonly Mock<IMapper> mockMapper;
         private readonly Mock<ILogger<DocumentManagementLogic>> mockLogger;
         private readonly DocumentManagementLogic _documentManagementLogic;
+        private readonly Mock<ILogger<DocumentManagementLogic>> _mockLogger;   
 
         public DocumentManagementLogicTests()
         {
