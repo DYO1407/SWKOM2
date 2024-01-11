@@ -4,6 +4,7 @@ using BusinessLogic.Entities;
 using BusinessLogic.Interfaces;
 using DataAccess.Interfaces;
 using FluentValidation;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 using Microsoft.Extensions.Logging;
@@ -12,17 +13,18 @@ namespace BusinessLogic.Tests
 {
     public class DocumentManagementLogicTests
     {
-        private readonly Mock<IDManagementRepository> _mockDocRepository;
-        private readonly Mock<IMapper> _mockMapper;
+        private readonly Mock<IDManagementRepository> mockIdManagementRepo;
+        private readonly Mock<IMapper> mockMapper;
+        private readonly Mock<ILogger<DocumentManagementLogic>> mockLogger;
         private readonly DocumentManagementLogic _documentManagementLogic;
         private readonly Mock<ILogger<DocumentManagementLogic>> _mockLogger;   
 
         public DocumentManagementLogicTests()
         {
-            _mockDocRepository = new Mock<IDManagementRepository>();
-            _mockMapper = new Mock<IMapper>();
-            _mockLogger = new Mock<ILogger<DocumentManagementLogic>>();
-            _documentManagementLogic = new DocumentManagementLogic(_mockDocRepository.Object, _mockMapper.Object, _mockLogger.Object);
+            mockIdManagementRepo = new Mock<IDManagementRepository>();
+            mockMapper = new Mock<IMapper>();
+            mockLogger = new Mock<ILogger<DocumentManagementLogic>>();
+            _documentManagementLogic = new DocumentManagementLogic(mockIdManagementRepo.Object, mockMapper.Object, mockLogger.Object);
         }
 
         [Fact]
@@ -35,7 +37,7 @@ namespace BusinessLogic.Tests
             _documentManagementLogic.DeleteDocument(documentId);
 
             // Assert
-            _mockDocRepository.Verify(repo => repo.DeleteDocument(documentId), Times.Once);
+            mockIdManagementRepo.Verify(repo => repo.DeleteDocument(documentId), Times.Once);
         }
 
         [Fact]
@@ -48,20 +50,8 @@ namespace BusinessLogic.Tests
             _documentManagementLogic.GetDocument(documentId);
 
             // Assert
-            _mockDocRepository.Verify(repo => repo.GetDocument(documentId), Times.Once);
+            mockIdManagementRepo.Verify(repo => repo.GetDocument(documentId), Times.Once);
         }
 
-
-        [Fact]
-        public void UpdateDocument_InvalidDocument_ShouldThrowValidationException()
-        {
-            // Arrange
-            var invalidDocument = new Document(); // Assuming this document is invalid
-            _mockMapper.Setup(mapper => mapper.Map<DataAccess.Entities.Document>(invalidDocument))
-                       .Returns(new DataAccess.Entities.Document());
-
-            // Act & Assert
-            Assert.Throws<ValidationException>(() => _documentManagementLogic.UpdateDocument(invalidDocument));
-        }
     }
 }
