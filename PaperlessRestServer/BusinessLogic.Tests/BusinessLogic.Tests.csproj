@@ -19,8 +19,16 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BusinessLogic.Entities\BusinessLogic.Entities.csproj" />
+    <ProjectReference Include="..\BusinessLogic.Exceptions\BusinessLogic.Exceptions.csproj" />
     <ProjectReference Include="..\BusinessLogic.Interfaces\BusinessLogic.Interfaces.csproj" />
     <ProjectReference Include="..\BusinessLogic\BusinessLogic.csproj" />
+    <ProjectReference Include="..\DataAccess.Entities\DataAccess.Entities.csproj" />
+    <ProjectReference Include="..\DataAccess.Exceptions\DataAccess.Exceptions.csproj" />
+    <ProjectReference Include="..\DataAccess.Interfaces\DataAccess.Interfaces.csproj" />
+    <ProjectReference Include="..\DataAccess.Sql\DataAccess.Sql.csproj" />
+    <ProjectReference Include="..\MinIOService\MinIOService.csproj" />
+    <ProjectReference Include="..\NPaperless.Services\PaperlessRestServer.csproj" />
+    <ProjectReference Include="..\RabbitMQConsumer\RabbitMQConsumer.csproj" />
   </ItemGroup>
 
 </Project>
