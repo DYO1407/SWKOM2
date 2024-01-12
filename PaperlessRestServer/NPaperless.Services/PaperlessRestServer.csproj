@@ -32,6 +32,7 @@
     <ProjectReference Include="..\BusinessLogic.Interfaces\BusinessLogic.Interfaces.csproj" />
     <ProjectReference Include="..\BusinessLogic\BusinessLogic.csproj" />
     <ProjectReference Include="..\DataAccess.Sql\DataAccess.Sql.csproj" />
+    <ProjectReference Include="..\ElasticSearchService\ElasticSearchService.csproj" />
     <ProjectReference Include="..\MinIOService\MinIOService.csproj" />
   </ItemGroup>
 </Project>
