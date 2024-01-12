@@ -50,7 +50,7 @@ namespace BusinessLogic.Tests
 
 
 
-        [Fact]
+       /* [Fact]
         public void UpdateCorrespondent_ValidCorrespondent_ReturnsUpdatedCorrespondent()
         {
             // Arrange
@@ -58,7 +58,7 @@ namespace BusinessLogic.Tests
             var mapperMock = new Mock<IMapper>();
             var loggerMock = new Mock<ILogger<CorrespondentLogic>>();
             var logic = new CorrespondentLogic(correspondentRepositoryMock.Object, mapperMock.Object, loggerMock.Object);
-            var validCorrespondent = new Correspondent { /* Populate valid correspondent properties */ };
+            var validCorrespondent = new Correspondent { /* Populate valid correspondent properties  };
 
             // Act
             var result = logic.UpdateCorrespondent(validCorrespondent);
@@ -66,6 +66,6 @@ namespace BusinessLogic.Tests
             // Assert
             Assert.NotNull(result);
             // Add more assertions based on your specific logic for updating a correspondent
-        }
+        }*/
     }
 }

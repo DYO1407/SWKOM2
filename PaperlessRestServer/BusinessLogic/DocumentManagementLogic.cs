@@ -95,7 +95,7 @@ namespace BusinessLogic
             return doc;
         }
 
-        private void ValidateDocument(Document document)
+        public void ValidateDocument(Document document)
         {
             var validationResult = _validator.Validate(document);
             if (!validationResult.IsValid)

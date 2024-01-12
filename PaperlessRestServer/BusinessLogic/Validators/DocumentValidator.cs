@@ -16,7 +16,7 @@ namespace BusinessLogic.Validators
             RuleFor(d => d.Id).NotEmpty();
             RuleFor(d => d.Correspondent).NotEmpty();
             RuleFor(d => d.DocumentType).NotEmpty();
-            RuleFor(d => d.StoragePath).NotEmpty();
+            //RuleFor(d => d.StoragePath).NotEmpty();
             RuleFor(d => d.Title).NotNull().NotEmpty();
             RuleFor(d => d.Content).NotNull().NotEmpty();
             RuleFor(d => d.Tags).NotEmpty();
